@@ -1,0 +1,42 @@
+The following code is the return from my doctests when running the command: python -m doctest plante6.py -v
+
+Trying:
+    calculate_area_of_rectangle(4, 5)
+Expecting:
+    20.0
+ok
+Trying:
+    calculate_area_of_rectangle(30.5, 2)
+Expecting:
+    61.0
+ok
+Trying:
+    calculate_area_of_rectangle(3.14, 10)
+Expecting:
+    31.4
+ok
+Trying:
+    calculate_area_of_rectangle(4, 4)
+Expecting:
+    16.0
+ok
+Trying:
+    calculate_area_of_rectangle(4, 4)
+Expecting:
+    16
+**********************************************************************
+File "/Users/Jacques.Plante@disney.com/Documents/merrimack/repos/CSC6003/module_06/plante6/plante6.py", line 34, in plante6.calculate_area_of_rectangle
+Failed example:
+    calculate_area_of_rectangle(4, 4)
+Expected:
+    16
+Got:
+    16.0
+1 items had no tests:
+    plante6
+**********************************************************************
+1 items had failures:
+   1 of   5 in plante6.calculate_area_of_rectangle
+5 tests in 2 items.
+4 passed and 1 failed.
+***Test Failed*** 1 failures.
