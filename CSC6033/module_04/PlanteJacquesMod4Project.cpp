@@ -72,8 +72,14 @@ class FSA
                     }
                     else if (character == '.')
                     {
-                        // If we have reached this point, it must be valid
-                        cState = retT;
+                        if (length > 1)
+                        {
+                            cState = retT;
+                        }
+                        else
+                        {
+                            cState = retF;
+                        }
                     }
                     else {
                         cState = retF;
@@ -99,9 +105,15 @@ int main()
     // OR
     // Must start with bb and be followed by 0 or more a's and NO b's
     cout << "Our RegEx rule is (a(a|b)*)|(bb(a)*)" << endl;
-    cout << "Enter a string (alphabet { a, b, c}) followed by '.' to denote the end of the string: ";
+    cout << "Enter a string (alphabet { a, b }) followed by '.' to denote the end of the string: ";
     // Get user input
     cin >> input;
+
+    if (input.back() != '.')
+    {
+        cout << endl << "No end character provided" << endl;
+        return 0;
+    }
 
 
     for (char c : input)
@@ -123,4 +135,6 @@ int main()
             break;
         }
     }
+
+    return 0;
 }
