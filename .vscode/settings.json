@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.css": "scss",
+        "string": "cpp",
+        "iosfwd": "cpp"
+    }
+}
