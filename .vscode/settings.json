@@ -2,6 +2,7 @@
     "files.associations": {
         "*.css": "scss",
         "string": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "ostream": "cpp"
     }
 }

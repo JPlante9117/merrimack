@@ -24,3 +24,32 @@ int main()
     cout << "the GCD of 1533 and 133 is: " << ex3 << endl;
     return 0;
 }
+
+// class Full_Date {
+//     public:
+//         int m = 1;
+//         int d = 1;
+//         int y = 1;
+
+//         Full_Date() {}
+//         // Full_Date() {
+//         //     y = 2000;
+//         // }
+//         Full_Date(int mon, int day) {
+//             m = mon;
+//             d = day;
+//             y = 2020;
+//         }
+//         int getM() const { return m; }
+//         int getD() const { return d; }
+//         int getY() const { return y; }
+//         void setY(int yr) { y = yr; }
+// };
+
+// int main() {
+//     Full_Date d1(3,14);
+//     Full_Date d2;
+//     std::cout << d1.getY() << " and " << d2.getY() << std::endl;
+//     std::cout << d1.m << endl;
+//     return 0;
+// }
