@@ -3,6 +3,7 @@
         "*.css": "scss",
         "string": "cpp",
         "iosfwd": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "istream": "cpp"
     }
 }
