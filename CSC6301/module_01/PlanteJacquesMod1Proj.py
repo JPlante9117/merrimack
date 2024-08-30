@@ -35,12 +35,3 @@ class Stack:
     def get_size(self):
         """ Returns the number of items in the Stack """
         return len(self.stack)
-
-# File Doc
-print(__doc__)
-# Class Doc
-print(Stack.__doc__)
-# Constructor Doc
-print(Stack.__init__.__doc__)
-# Class Method Doc example
-print(Stack.remove.__doc__)
