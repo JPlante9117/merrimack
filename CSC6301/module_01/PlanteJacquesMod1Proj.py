@@ -35,3 +35,13 @@ class Stack:
     def get_size(self):
         """ Returns the number of items in the Stack """
         return len(self.stack)
+
+myStack = Stack("carrots")
+myStack.add("beans")
+myStack.add("onions")
+myStack.add("peas")
+myStack.add("potatoes")
+
+print(f"My stack has {myStack.get_size()} items.")
+print(f"Removing the top item, I remove {myStack.remove()}")
+print(f"Now, my Stack has a size of {myStack.get_size()} and the new top item is {myStack.read_top()}")
