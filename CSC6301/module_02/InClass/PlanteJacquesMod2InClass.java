@@ -25,6 +25,8 @@ public class PlanteJacquesMod2InClass {
         int n   = Integer.parseInt(userInput.nextLine()),
             acc = 0,
             odd = 1;
+
+        userInput.close();
         // Loop from i to n and perform the arithmetic
         for (int i = 0; i < n; i++) {
             acc += odd;
