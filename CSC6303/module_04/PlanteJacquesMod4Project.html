@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Jacques Plante - VSCode -->
+    <!-- Module 4 Project -->
+    <!-- Added CSS for myself. <script> tag starts on line 105  -->
+  <title>Input and Output Example</title>
+  <style>
+    /* Some minor CSS for fun! */
+    @keyframes body-fade {
+        0% {
+            background: black;
+        }
+
+        100% {
+            background: rgb(63, 76, 119);
+        }
+    }
+
+    @keyframes card-in {
+        0% {
+            opacity: 0;
+            transform: translateX(-150px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: none;
+        }
+        
+    }
+    @keyframes card-drop {
+        0% {
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0.6);
+        }
+
+        100% {
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.6);
+        }
+    }
+    body {
+        background: black;
+        animation: body-fade 1200ms ease 500ms forwards;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100dvh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card {
+        opacity: 0;
+        animation: card-in 1000ms ease 800ms forwards, card-drop 300ms ease 2000ms forwards;
+        background-color: white;
+        border-radius: 6px;
+        padding: 1rem;
+        height: 300px;
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        box-shadow: none;
+    }
+    .card > h1 {
+        font-size: 24px;
+        font-weight: 600;
+        color: rgb(39, 39, 39);
+        align-self: center;
+    }
+    .card > input {
+        width: 100%;
+        border: none;
+        background: rgb(197, 200, 211);
+        border-radius: 6px;
+        height: 2.5rem;
+        font-size: 2rem;
+        text-align: center;
+    }
+    .card > button {
+        border-radius: 6px;
+        height: 2rem;
+        font-size: 1.5rem;
+        text-align: center;
+        background-color: white;
+        transition: 200ms ease;
+        box-shadow: 0 3px 0px rgb(63, 76, 119);
+        width: 80%;
+        align-self: center;
+    }
+    .card > button:active:not(button:disabled) {
+        box-shadow: 0 1px 0px rgb(63, 76, 119);
+        transform: translateY(2px);
+    }
+    .card > button:disabled {
+        filter: grayscale(1);
+        box-shadow: 0 3px 0px;
+    }
+    .prime {
+        color: blue;
+    }
+    .notPrime {
+        color: red;
+    }
+  </style>
+  <script>
+    /**
+     * Determine Prime is what we use to determine the prime-ness of the user provided number
+     * Takes in an integer n and performs the mathematics required to determine prime
+     * 
+     * @param n int
+     * 
+     * @returns boolean
+     */
+    function determinePrime(n) {
+        if (n <= 1) {
+            return false;
+        }
+
+        if (n <= 3) {
+            return true;
+        }
+
+        if (n % 2 == 0 || n % 3 == 0) {
+            return false;
+        }
+        for (let i = 5; i * i <= n; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * On-Click Handler for our button
+     * Function gets the input field and the output div, performs the determinePrime function
+     * on the input's value, then populates the output div as expected for the given result
+     * 
+     * @returns null
+     */
+    function isPrime() {
+        // Query for our input and output divs
+        let input      = document.querySelector('#numToCheck') || null,
+            outputDiv  = document.querySelector('#output') || null,
+            num        = input && parseInt(input.value) || 0,
+            numIsValid = typeof num === "number" && num >= 2 && num <= 9999,
+            isPrime, outputText;
+
+        // Make sure we have valid elements and num
+        if (input && outputDiv && numIsValid) {
+            isPrime = determinePrime(num);
+
+            if (isPrime) { // Prime numbers get 'prime' class
+                outputText = `The number ${num} is prime`;
+                outputDiv.classList.add('prime');
+                outputDiv.classList.remove('notPrime');
+            } else { // Non-Prime numbers get 'notPrime' class
+                outputText = `The number ${num} is not prime`;
+                outputDiv.classList.add('notPrime');
+                outputDiv.classList.remove('prime');
+            }
+
+            // Update the output text
+            outputDiv.textContent = outputText;
+        }
+    }
+    function inputKeyUpHandler(el) {
+        let button = document.querySelector('button');
+
+        // Use JS to enforce the min/max of the input when typing
+        if (el.value != "") {
+            let val = parseInt(el.value),
+                min = parseInt(el.min),
+                max = parseInt(el.max);
+
+            if (val < min) {
+                el.value = min;
+            } else if (val > max) {
+                el.value = max;
+            }
+
+            // Enable button if we have a value
+            button.disabled = false;
+        } else {
+            // Disable button if we don't have a value
+            button.disabled = true;
+        }
+    }
+</script>
+</head>
+<body>
+    <div class="card">
+        <h1>Prime Number Checker</h1>
+            <label>Enter a number from 2 to 9999:</label>
+            <input type="number" min="2" max="9999" id="numToCheck" onkeyup=inputKeyUpHandler(this) />
+            <button onclick="isPrime()" disabled>Check If Prime</button>
+        <p id="output">I'm waiting...</p>
+    </div>
+</body>
+</html>
