@@ -5,7 +5,7 @@
     <!-- Jacques Plante - VSCode -->
     <!-- Module 4 Project -->
     <!-- Added CSS for myself. <script> tag starts on line 105  -->
-  <title>Input and Output Example</title>
+  <title>JavaScript Prime Checker</title>
   <style>
     /* Some minor CSS for fun! */
     @keyframes body-fade {
@@ -178,7 +178,8 @@
             } else if (val > max) {
                 el.value = max;
             }
-
+            // Force int value
+            el.value = val;
             // Enable button if we have a value
             button.disabled = false;
         } else {
@@ -194,7 +195,7 @@
             <label>Enter a number from 2 to 9999:</label>
             <input type="number" min="2" max="9999" id="numToCheck" onkeyup=inputKeyUpHandler(this) />
             <button onclick="isPrime()" disabled>Check If Prime</button>
-        <p id="output">I'm waiting...</p>
+        <p id="output"></p>
     </div>
 </body>
 </html>
