@@ -1,6 +1,6 @@
 # Jacques Plante - VSCode
 # Module 6 Project
-# Testing OS: MacOS
+# Testing OS: MacOS, Windows
 
 import os # Operating System
 import platform # Platform
@@ -41,36 +41,51 @@ def get_correct_path(user_input, filename):
     # Get the current operating system
     current_os = platform.system()
 
-    # Convert relative paths to absolute paths for the current directory
-    if not os.path.isabs(user_input):
-        user_input = os.path.abspath(user_input)
-
-    # Normalize the path based on the OS
-    if current_os == 'Windows':
-        # Replace forward slashes with backslashes
-        normalized_path = user_input.replace('/', '\\')
-        # Handle drive letters (ensure it starts with a drive letter and a colon)
-        if ':' not in normalized_path.split('\\')[0]:
-            drive = ''
-            while(not drive):
-                drive = input("Enter a Drive Letter: ")
-                if (len(drive) > 1):
-                    drive = ''
-            if (user_input[0] != '/'):
-                drive = drive + ':\\'
-            else:
-                drive = drive + ':'
-
-            normalized_path = f'{drive}{normalized_path}'
-        # Wrap whole thing in quotes in case of spaces
-        normalized_path = f'"{normalized_path}\{filename}"'
-    else:
-        # For macOS and Linux, replace backslashes with forward slashes
-        normalized_path = user_input.replace('\\', '/').replace(" ", "\\ ")
-        if ':' in normalized_path.split('/')[0]:
-            split_path = normalized_path.split('/')
+    # Check if the input path is a Windows-style path (contains a drive letter like "C:")
+    windows_path_pattern = r"^[a-zA-Z]:\\"
+    if re.match(windows_path_pattern, user_input):
+        # If it's a Windows path, handle accordingly based on the OS
+        if current_os == 'Windows':
+            # Normalize for Windows
+            normalized_path = user_input.replace('/', '\\')
+        else:
+            # Strip the drive letter for Linux/macOS and convert backslashes to slashes
+            split_path = user_input.split('\\')
+            # Remove the drive letter (e.g., 'C:')
             split_path.pop(0)
-            normalized_path = f'/{"/".join(split_path)}/{filename}'
+            normalized_path = f'/{"/".join(split_path)}'
+    else:
+        # If it's not a Windows-style path, treat it as a normal relative/absolute path
+        if not os.path.isabs(user_input):
+            user_input = os.path.abspath(user_input)
+
+        # Normalize the path based on the OS
+        if current_os == 'Windows':
+            # Replace forward slashes with backslashes for Windows
+            normalized_path = user_input.replace('/', '\\')
+            # Handle drive letters (ensure it starts with a drive letter and a colon)
+            if ':' not in normalized_path.split('\\')[0]:
+                drive = ''
+                while(not drive):
+                    drive = input("Enter a Drive Letter: ")
+                    if (len(drive) > 1):
+                        drive = ''
+                if (user_input[0] != '/'):
+                    drive = drive + ':\\'
+                else:
+                    drive = drive + ':'
+
+                normalized_path = f'{drive}{normalized_path}'
+        else:
+            # For macOS and Linux, replace backslashes with forward slashes
+            normalized_path = user_input.replace('\\', '/').replace(" ", "\\ ")
+
+    if (current_os == 'Windows'):
+        # Wrap whole thing in quotes for windows path to prevent space issues
+        normalized_path = f'"{normalized_path}\\{filename}"'
+    else:
+        # Append the filename to the normalized path
+        normalized_path = f'{normalized_path}/{filename}'.replace("//", "/")
 
     return normalized_path
 
