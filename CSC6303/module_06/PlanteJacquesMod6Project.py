@@ -39,7 +39,7 @@ def validate_filename(filename):
 
 def get_correct_path(user_input, filename):
     # Get the current operating system
-    current_os = platform.system()
+    current_os = 'darwin'
 
     # Check if the input path is a Windows-style path (contains a drive letter like "C:")
     windows_path_pattern = r"^[a-zA-Z]:\\"
@@ -85,7 +85,7 @@ def get_correct_path(user_input, filename):
         normalized_path = f'"{normalized_path}\\{filename}"'
     else:
         # Append the filename to the normalized path
-        normalized_path = f'{normalized_path}/{filename}'.replace("//", "/")
+        normalized_path = f'{normalized_path}/{filename}'.replace("//", "/").replace('\\', '/').replace(" ", "\\ ")
 
     return normalized_path
 
