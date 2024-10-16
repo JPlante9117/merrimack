@@ -14,18 +14,18 @@
         <h3 id="change_js"; style="color:green">This Text Changes Color</h3>
         <script>
             function changeColor(color) {
-                let item = document.getElementById("change_js");
+                let targetEl = document.getElementById("change_js");
                 if (color == 1) {
-                    item.style.color = 'black';
-                    item.innerText = "This text is Black";
+                    targetEl.style.color = 'black';
+                    targetEl.innerText = "This text is Black";
                 }
                 else if (color == 2) {
-                    document.getElementById("change_js").style.color = 'blue';
-                    item.innerText = "This text is Blue";
+                    targetEl.style.color = 'blue';
+                    targetEl.innerText = "This text is Blue";
                 }
                 else {
-                    document.getElementById("change_js").style.color = 'green';
-                    item.innerText = "This text is Green";
+                    targetEl.style.color = 'green';
+                    targetEl.innerText = "This text is Green";
                 }
             }
         </script>
