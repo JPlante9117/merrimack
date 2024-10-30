@@ -1,3 +1,4 @@
+-- Inserts into the Student table...
 INSERT INTO Student (
     first_name,
     last_name,
@@ -10,7 +11,9 @@ INSERT INTO Student (
     room_number,
     subject,
     class_grade
-) VALUES (
+) 
+-- ...these values
+VALUES (
     'Jacques',
     'Plante',
     'plantejac@merrimack.edu',
