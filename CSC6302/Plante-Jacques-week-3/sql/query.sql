@@ -45,3 +45,24 @@ FROM
     Teacher t
 JOIN
     Classes c ON c.teacher_id = t.teacher_id;
+
+-- WEEK 3 QUERY
+SELECT CONCAT(s.last_name,', ', s.first_name) AS student_name,
+    c.subject AS class_name,
+    CONCAT(t.last_name, ', ', t.first_name) AS teacher_name,
+    sc.class_grade AS grade
+FROM
+    Student s
+JOIN
+    StudentClasses sc ON sc.student_id = s.student_id
+JOIN
+    Classes c ON c.class_id = sc.class_id
+JOIN
+    Teacher t ON t.teacher_id = c.teacher_id
+    -- Order by last name first
+ORDER BY s.last_name,
+    -- Then by first name,
+    s.first_name,
+    -- Then by Grade
+    -- Show the order of how grades should be ordered
+    FIELD(sc.class_grade, 'A', 'B', 'C', 'D', 'F');

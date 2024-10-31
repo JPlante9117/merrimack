@@ -89,7 +89,8 @@ CREATE TABLE IF NOT EXISTS StudentClasses (
     student_class_id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
     class_id INT,
-    class_grade CHAR(1),
+    -- Grade ENUM reflects the typical letter grades that can be received in school
+    class_grade ENUM('A', 'B', 'C', 'D', 'F'),
     FOREIGN KEY (student_id) REFERENCES Student(student_id),
     FOREIGN KEY (class_id) REFERENCES Classes(class_id)
 );
