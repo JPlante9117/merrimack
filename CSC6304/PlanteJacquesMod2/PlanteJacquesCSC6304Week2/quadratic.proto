@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+message QuadraticRequest {
+    int32 a = 1;
+    int32 b = 2;
+    int32 c = 3;
+}
+
+message QuadraticResponse {
+    string message = 1; // responding with message so that we can also pass error message
+}
+
+service QuadraticService {
+    rpc SolveQuadratic(QuadraticRequest) returns (QuadraticResponse) {}
+}
