@@ -1,6 +1,5 @@
 import ClassesDAL from '../DAL/ClassesDAL.js';
-import StudentClassesDAL from '../DAL/StudentClassesDAL.js';
-import { checkArguments } from '../helpers.js';
+import { checkArguments, isString } from '../helpers.js';
 
 class ClassesBLL {
     getClass(id, callback) {
@@ -14,7 +13,7 @@ class ClassesBLL {
                 return callback(err);
             }
 
-            // Pass student through cb
+            // Pass class through cb
             callback(null, msg);
         });
     }
@@ -26,7 +25,7 @@ class ClassesBLL {
             room_number: roomNumber
         });
 
-        if (!allArgumentsValid) {
+        if (isString(allArgumentsValid)) {
             return callback(new Error(`${allArgumentsValid} is required.`))
         }
 
@@ -36,7 +35,6 @@ class ClassesBLL {
                 return callback(err);
             }
 
-            console.log("Class created: ", msg);
             callback(null, msg);
         });
     }
@@ -51,7 +49,6 @@ class ClassesBLL {
                 console.log("Error enrolling student in class: ", err);
             }
 
-            console.log("Student enrolled: ", msg);
             callback(null, msg);
         });
     }

@@ -8,6 +8,11 @@ const checkArguments = (args) => {
     return false;
 }
 
+const isString = (item) => {
+    return typeof item === 'string';
+}
+
 export {
-    checkArguments
+    checkArguments,
+    isString
 }

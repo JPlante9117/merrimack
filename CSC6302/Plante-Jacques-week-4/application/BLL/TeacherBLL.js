@@ -1,6 +1,5 @@
 import TeacherDAL from '../DAL/TeacherDAL.js';
-import StudentDAL from '../DAL/TeacherDAL.js';
-import { checkArguments } from '../helpers.js';
+import { checkArguments, isString } from '../helpers.js';
 
 class TeacherBLL {
     getTeacher(id, callback) {
@@ -8,7 +7,7 @@ class TeacherBLL {
             return callback(new Error("ID required for search"));
         }
 
-        StudentDAL.read(id, (err, msg) => {
+        TeacherDAL.read(id, (err, msg) => {
             if (err) {
                 console.log("Error finding teacher: ", err);
                 return callback(err);
@@ -41,19 +40,38 @@ class TeacherBLL {
             email_address: emailAddress
         });
 
-        if (!allArgumentsValid) {
+        if (isString(allArgumentsValid)) {
             return callback(new Error(`${allArgumentsValid} is required.`))
         }
 
-        StudentDAL.add(firstName, lastName, emailAddress, (err, msg) => {
+        TeacherDAL.add(firstName, lastName, emailAddress, (err, msg) => {
             if (err) {
                 console.log("Error adding teacher: ", err);
                 return callback(err);
             }
 
-            console.log("Teacher added: ", msg);
             callback(null, msg);
         });
+    }
+
+    getStudents(firstName, lastName, callback) {
+        let allArgumentsValid = checkArguments({
+            first_name: firstName,
+            last_name: lastName
+        });
+
+        if (isString(allArgumentsValid)) {
+            return callback(new Error(`${allArgumentsValid} is required`))
+        }
+
+        TeacherDAL.getStudents(firstName, lastName, (err, msg) => {
+            if (err) {
+                console.log("Error finding students: ", err);
+                return callback(err);
+            }
+            
+            callback(null, msg)
+        })
     }
 }
 

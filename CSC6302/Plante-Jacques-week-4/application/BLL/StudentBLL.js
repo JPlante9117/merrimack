@@ -13,7 +13,6 @@ class StudentBLL {
                 return callback(err);
             }
 
-            // Pass student through cb
             callback(null, msg);
         });
     }
@@ -27,8 +26,8 @@ class StudentBLL {
             student_grade: gradeYear
         });
 
-        if (!allArgumentsValid) {
-            return callback(new Error(`${allArgumentsValid} is required.`))
+        if (typeof allArgumentsValid == 'string') {
+            return callback(new Error(`${allArgumentsValid} is required.`));
         }
 
         StudentDAL.add(firstName, lastName, emailAddress, dob, gradeYear, (err, msg) => {
@@ -37,7 +36,6 @@ class StudentBLL {
                 return callback(err);
             }
 
-            console.log("Student added: ", msg);
             callback(null, msg);
         });
     }

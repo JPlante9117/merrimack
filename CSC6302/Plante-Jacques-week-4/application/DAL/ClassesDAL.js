@@ -26,7 +26,7 @@ class ClassesDAL {
     }
 
     enrollStudent(studentId, classId, grade) {
-        let sql = `CALL enrollStudent(?, ?, ?)`;
+        let sql = `SELECT enrollStudent(?, ?, ?)`;
         connection.query(sql, [studentId, classId, grade], (err, results) => {
             if (err) return callback(err);
             callback(null, `Student enrolled in class!`);

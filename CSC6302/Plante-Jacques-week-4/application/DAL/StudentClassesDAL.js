@@ -1,3 +1,6 @@
+// May not need? As I think the DAL and BLL for Classes should handle enrollment using our function
+// I've instead put that logic there for now.
+
 import connection from '../connect.js';
 
 class StudentClasses {
