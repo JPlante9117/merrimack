@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="index.js"></script>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <div class="mode">Mode: <span>Light</span></div>
+        <h1 class="title">Jacques' Week 4 Assignment</h1>
+        <h2 class="subheading">Animations</h2>
+        <p class="description">Click the button below to move the box across the screen! Click it again to move it back.</p>
+        <button onclick="animateBox()">Animate Box</button>
+        <div class="boxesWrapper">
+            <div class="boxContainer">
+                <div id="static-box" class="box">I don't move</div>
+            </div>
+            <div class="boxContainer">
+                <div id="animation-box" class="box">I can move!</div>
+            </div>
+        </div>
+
+        <h2 class="subheading">Enable Darkmode</h2>
+        <p class="description">Click the button below to toggle on and off darkmode</p>
+        <button id="dm" onclick="toggleDarkmode()">Enable Darkmode</button>
+    </body>
+</html>

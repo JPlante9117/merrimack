@@ -1,0 +1,94 @@
+body {
+    position: relative;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    background-color: rgb(186, 240, 222);
+    color: black;
+    transition: 300ms ease;
+}
+
+.mode {
+    position: absolute;
+    font-size: 0.75rem;
+    top: 0;
+    right: 0;
+    color: grey;
+    transition: 300ms ease;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.subheading {
+    font-size: 1.5rem;
+    color: grey;
+    transition: 300ms ease;
+}
+
+.boxesWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.boxContainer {
+    position: relative;
+    height: 4rem;
+}
+
+.box {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background-color: teal;
+    transition: all 300ms ease, left 3s ease, transform 3s ease;
+    position: absolute;
+    left: 0;
+    transform: translateX(0%);
+    padding: 0.5rem;
+    color: black;
+}
+
+.box.right {
+    left: 100%;
+    transform: translateX(-100%)
+}
+
+button {
+    border-radius: 2px;
+    padding: 0.25rem;
+    border: 1px solid transparent;
+    background-color: rgb(86, 86, 112);
+    color: white;
+    transition: 300ms ease;
+}
+
+/* DARKMODE */
+
+body.darkmode {
+    background-color: black;
+    color: white;
+}
+
+body.darkmode .mode {
+    color: rgb(180, 180, 180);
+}
+
+body.darkmode button {
+    border: 1px solid white;
+    background-color: rgb(28, 28, 35);
+}
+
+body.darkmode .subheading {
+    color: rgb(180, 180, 180);
+}
+
+body.darkmode .box {
+    background-color: rgb(0, 68, 68);
+    color: white;
+    border: 1px solid white;
+}
