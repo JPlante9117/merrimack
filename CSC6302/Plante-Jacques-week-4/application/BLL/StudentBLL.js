@@ -1,5 +1,5 @@
 import StudentDAL from '../DAL/StudentDAL.js';
-import { checkArguments } from '../helpers.js';
+import { checkArguments, isString } from '../helpers.js';
 
 class StudentBLL {
     getStudent(id, callback) {
@@ -26,7 +26,7 @@ class StudentBLL {
             student_grade: gradeYear
         });
 
-        if (typeof allArgumentsValid == 'string') {
+        if (isString(allArgumentsValid)) {
             return callback(new Error(`${allArgumentsValid} is required.`));
         }
 
