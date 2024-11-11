@@ -8,6 +8,6 @@ const checkArguments = (args) => {
     return false;
 }
 
-module.exports = {
+export {
     checkArguments
 }

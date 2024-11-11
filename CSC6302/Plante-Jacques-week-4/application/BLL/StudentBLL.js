@@ -20,7 +20,7 @@ class StudentBLL {
 
     createStudent(firstName, lastName, emailAddress, dob, gradeYear, callback) {
         let allArgumentsValid = checkArguments({
-            firstName: firstName,
+            first_name: firstName,
             last_name: lastName,
             email_address: emailAddress,
             date_of_birth: dob,

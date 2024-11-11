@@ -24,6 +24,14 @@ class ClassesDAL {
             callback(null, `Class ${subject} added!`);
         })
     }
+
+    enrollStudent(studentId, classId, grade) {
+        let sql = `CALL enrollStudent(?, ?, ?)`;
+        connection.query(sql, [studentId, classId, grade], (err, results) => {
+            if (err) return callback(err);
+            callback(null, `Student enrolled in class!`);
+        });
+    }
 }
 
 export default new ClassesDAL();

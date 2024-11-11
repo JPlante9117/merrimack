@@ -29,8 +29,8 @@ getStudentById(1);
 
 // KEEP AT END OF FILE
 
-connection.end(err => {
-    if (err) return console.error(err.message);
+// connection.end(err => {
+//     if (err) return console.error(err.message);
 
-    console.log('Connection closed.')
-})
+//     console.log('Connection closed.')
+// })

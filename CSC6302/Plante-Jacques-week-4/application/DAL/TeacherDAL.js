@@ -12,7 +12,7 @@ class TeacherDAL {
         });
     }
 
-    getId(firstName, lastName) {
+    getId(firstName, lastName, callback) {
         let sql = "CALL getTeacherId(?, ?)";
         connection.query(sql, [firstName, lastName], (err, results) => {
             if (err) return callback(err);
