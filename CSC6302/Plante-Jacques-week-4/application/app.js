@@ -8,28 +8,48 @@ connection.connect((err) => {
     console.log('Connected to the MySQL server.');
 });
 
-StudentBLL.createStudent("Tony", "Hawk", "hawkt@merrimack.edu", "1968-05-12", 10, (err, student, addtlInfo) => {
-    let firstName = addtlInfo.firstName,
-        lastName = addtlInfo.lastName;
+const getStudentById = (id) => {
+    StudentBLL.getStudent(id, (err, student) => {
+        if (err) {
+            console.log("Error fetching student: ", err);
+            return;
+        }
 
-    if (err) {
-        console.log("Error creating student: ", err);
-        return;
-    }
+        if (!student) {
+            console.log("Student not found.");
+            return;
+        }
 
-    console.log(`Student ${firstName} ${lastName} created!`);
-});
-TeacherBLL.getStudents("Lou", "Wilson", (err, students, addtlInfo) => {
-    let firstName = addtlInfo.firstName,
-        lastName = addtlInfo.lastName;
+        console.log("Student found: ", student);
+    });
+}
 
-    if (err) {
-        console.log(`Error getting students for ${firstName} ${lastName}: `, err);
-        return;
-    }
+// Calls Function
+const addStudent = (firstName, lastName, emailAddres, dob, gradeYear) => {
+    StudentBLL.createStudent(firstName, lastName, emailAddres, dob, gradeYear, (err, student) => {
+        if (err) {
+            console.log("Error creating student: ", err);
+            return;
+        }
 
-    console.log(`${firstName} ${lastName}'s students: `, students);
-});
+        console.log(`Student ${firstName} ${lastName} created!`);
+    });
+}
+
+// Calls the Stored Procedure getTeacherStudents
+const getStudents = (firstName, lastName) => {
+    TeacherBLL.getStudents(firstName, lastName, (err, students) => {
+        if (err) {
+            console.log(`Error getting students for ${firstName} ${lastName}: `, err);
+            return;
+        }
+
+        console.log(`${firstName} ${lastName}'s students: `, students);
+    });
+}
+
+addStudent("Tony", "Hawk", "hawkt@merrimack.edu", "1968-05-12", 10);
+getStudents("Lou", "Wilson");
 
 // KEEP AT END OF FILE
 
