@@ -1,6 +1,6 @@
 import TeacherDAL from '../DAL/TeacherDAL.js';
 import { Student } from './StudentBLL.js';
-import { checkArguments, isString, defaultCallback } from '../helpers.js';
+import { checkArguments, isString } from '../helpers.js';
 
 export class Teacher {
     constructor({teacher_id, first_name, last_name, email_address}) {
@@ -11,85 +11,79 @@ export class Teacher {
     }
 }
 class TeacherBLL {
-    getTeacher(id, callback = defaultCallback) {
-        if (!id) {
-            return callback(new Error("ID required for search"));
-        }
-
-        TeacherDAL.read(id, (err, teacherResp) => {
-            if (err) {
-                console.log("Error finding teacher: ", err);
-                return callback(err);
+    async getTeacher(id) {
+        try {
+            if (!id) {
+                return new Error("ID required for search");
             }
-
-            let teacher = new Teacher(teacherResp);
-
-            // Pass teacher through cb
-            callback(null, teacher);
-        });
+    
+            let teacherResp = await TeacherDAL.read(id),
+                teacher = new Teacher(teacherResp);
+    
+            return teacher;
+        } catch (err) {
+            console.log("TeacherBLL::getTeacher::Error: ", err);
+        }
     }
 
-    getTeacherId(firstName, lastName, callback = defaultCallback) {
-        if (!firstName || !lastName) {
-            return callback(new Error("Both first and last name required for search"));
-        }
-
-        TeacherDAL.getId(firstName, lastName, (err, id) => {
-            if (err) {
-                console.log("Error finding teacher: ", err);
-                return callback(err);
+    async getTeacherId(firstName, lastName) {
+        try {
+            if (!firstName || !lastName) {
+                return new Error("Both first and last name required for search");
             }
-
-            callback(null, id);
-        })
+    
+            let id = await TeacherDAL.getId(firstName, lastName);
+    
+            return id;
+        } catch (err) {
+            console.log("TeacherBLL::getTeacherId::Error: ", err);
+        }
     }
 
-    createTeacher(firstName, lastName, emailAddress, callback = defaultCallback) {
-        let allArgumentsValid = checkArguments({
-            first_name: firstName,
-            last_name: lastName,
-            email_address: emailAddress
-        });
-
-        if (isString(allArgumentsValid)) {
-            return callback(new Error(`${allArgumentsValid} is required.`))
-        }
-
-        TeacherDAL.add(firstName, lastName, emailAddress, (err, teacherResp) => {
-            if (err) {
-                console.log("Error adding teacher: ", err);
-                return callback(err);
+    async createTeacher(firstName, lastName, emailAddress) {
+        try {
+            let allArgumentsValid = checkArguments({
+                first_name: firstName,
+                last_name: lastName,
+                email_address: emailAddress
+            });
+    
+            if (isString(allArgumentsValid)) {
+                return new Error(`${allArgumentsValid} is required.`);
             }
-
-            let teacher = new Teacher(teacherResp);
-
-            callback(null, `Teacher ${teacher.firstName} ${teacher.lastName} created!`);
-        });
+    
+            let teacherResp = await TeacherDAL.add(firstName, lastName, emailAddress),
+                teacherId = teacherResp.insertId,
+                teacher = await this.getTeacher(teacherId);
+    
+            return teacher;
+        } catch (err) {
+            console.log("TeacherBLL::createTeacher::Error: ", err);
+        }
     }
 
-    getStudents(firstName, lastName, callback = defaultCallback) {
-        let allArgumentsValid = checkArguments({
-            first_name: firstName,
-            last_name: lastName
-        });
-
-        if (isString(allArgumentsValid)) {
-            return callback(new Error(`${allArgumentsValid} is required`))
-        }
-
-        TeacherDAL.getStudents(firstName, lastName, (err, studentsResp = []) => {
-            if (err) {
-                console.log("Error finding students: ", err);
-                return callback(err);
+    async getStudents(firstName, lastName) {
+        try {
+            let allArgumentsValid = checkArguments({
+                first_name: firstName,
+                last_name: lastName
+            });
+    
+            if (isString(allArgumentsValid)) {
+                return new Error(`${allArgumentsValid} is required`);
             }
-
-            let studentsArr = [];
+    
+            let studentsResp = await TeacherDAL.getStudents(firstName, lastName),
+                studentsArr = [];
+    
             studentsResp.forEach(student => {
                 studentsArr.push(new Student(student))
             });
-            
-            callback(null, studentsArr)
-        })
+    
+            return studentsArr;
+        } catch (err) {
+            console.log("TeacherBLL::getStudents::Error: ", err);
+        } 
     }
 }
 

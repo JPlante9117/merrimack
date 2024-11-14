@@ -1,5 +1,5 @@
 import StudentDAL from '../DAL/StudentDAL.js';
-import { checkArguments, isString, defaultCallback } from '../helpers.js';
+import { checkArguments, isString } from '../helpers.js';
 
 export class Student {
     constructor({student_id, first_name, last_name, email_address, date_of_birth, student_grade}) {
@@ -13,46 +13,42 @@ export class Student {
 }
 
 class StudentBLL {
-    getStudent(id, callback = defaultCallback) {
-        if (!id) {
-            return callback(new Error("ID required for search"));
-        }
-
-        StudentDAL.read(id, (err, studentResp) => {
-            if (err) {
-                console.log("Error finding student: ", err);
-                return callback(err);
+    async getStudent(id) {
+        try {
+            if (!id) {
+                return new Error("ID required for search");
             }
-
-            let student = new Student(studentResp);
-
-            callback(null, student);
-        });
+    
+            let studentResp = await StudentDAL.read(id),
+                student = new Student(studentResp);
+    
+            return student;
+        } catch (err) {
+            console.log("StudentBLL::getStudent::Error: ", err);
+        }
     }
 
-    createStudent(firstName, lastName, emailAddress, dob, gradeYear, callback = defaultCallback) {
-        let allArgumentsValid = checkArguments({
-            first_name: firstName,
-            last_name: lastName,
-            email_address: emailAddress,
-            date_of_birth: dob,
-            student_grade: gradeYear
-        });
-
-        if (isString(allArgumentsValid)) {
-            return callback(new Error(`${allArgumentsValid} is required.`));
-        }
-
-        StudentDAL.add(firstName, lastName, emailAddress, dob, gradeYear, (err, id) => {
-            if (err) {
-                console.log("Error adding student: ", err);
-                return callback(err);
-            }
-
-            this.getStudent(id, (err, student) => {
-                callback(null, `${student.firstName} ${student.lastName} created!`);
+    async createStudent(firstName, lastName, emailAddress, dob, gradeYear) {
+        try {
+            let allArgumentsValid = checkArguments({
+                first_name: firstName,
+                last_name: lastName,
+                email_address: emailAddress,
+                date_of_birth: dob,
+                student_grade: gradeYear
             });
-        });
+    
+            if (isString(allArgumentsValid)) {
+                return new Error(`${allArgumentsValid} is required.`);
+            }
+    
+            let studentResp = await StudentDAL.add(firstName, lastName, emailAddress, dob, gradeYear),
+                student = await this.getStudent(studentResp);
+    
+            return student;
+        } catch (err) {
+            console.log("StudentBLL::createStudent::Error: ", err);
+        }
     }
 }
 

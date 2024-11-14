@@ -1,21 +1,24 @@
 import connection from '../connect.js';
 
 class StudentDAL {
-    read(studentId, callback) {
+    async read(studentId) {
         let sql = "SELECT * FROM Student WHERE student_id = ?";
-        connection.query(sql, [studentId], (err, results) => {
-            if (err) return callback(err);
-            callback(null, results[0]);
-        });
+        return new Promise((resolve, reject) => {
+            connection.execute(sql, [studentId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]);
+            });
+        }); 
     }
 
-    add(firstName, lastName, emailAddress, dob, gradeYear, callback){ 
+    async add(firstName, lastName, emailAddress, dob, gradeYear){ 
         let sql = "SELECT addStudent(?, ?, ?, ?, ?) AS id";
-        connection.query(sql, [firstName, lastName, emailAddress, dob, gradeYear], (err, results) => {
-            if (err) return callback(err);
-            
-            callback(null, results[0].id);
-        })
+        return new Promise((resolve, reject) => {
+            connection.execute(sql, [firstName, lastName, emailAddress, dob, gradeYear], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0].id);
+            })
+        });
     }
 }
 

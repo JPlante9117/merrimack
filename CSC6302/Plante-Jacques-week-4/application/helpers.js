@@ -12,27 +12,7 @@ const isString = (item) => {
     return typeof item === 'string';
 }
 
-const defaultCallback = (err, payload) => {
-    if (err) {
-        return err;
-    }
-
-    return payload;
-}
-
-const loggingCallback = (err, payload) => {
-    if (err) {
-        console.log("Error: ", err);
-        return err;
-    }
-
-    console.log(payload);
-    return payload;
-}
-
 export {
     checkArguments,
-    isString,
-    defaultCallback,
-    loggingCallback
+    isString
 }

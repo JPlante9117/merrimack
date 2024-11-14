@@ -1,36 +1,41 @@
 import connection from '../connect.js';
 
 class ClassesDAL {
-    read(class_id, callback) {
+    async read(class_id) {
         let sql = `
         SELECT *
         FROM Classes
         WHERE class_id = ?`;
-        connection.query(sql, [class_id], (err, results) => {
-            if (err) return callback(err);
-            callback(null, results[0]);
+        return new Promise((resolve, reject) => {
+            connection.execute(sql, [class_id], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]);
+            });
         });
     }
 
-    add(subject, teacherId, roomNumber){ 
+    async add(subject, teacherId, roomNumber){ 
         let sql = `
         INSERT INTO Classes (
             subject,
             teacher_id,
             room_number
         ) VALUES (?, ?, ?)`;
-        connection.query(sql, [subject, teacherId, roomNumber], (err, results) => {
-            if (err) return callback(err);
-            callback(null, results[0]);
-        })
+        return new Promise((resolve, reject) => {
+            connection.execute(sql, [subject, teacherId, roomNumber], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
     }
 
-    enrollStudent(studentId, classId, grade, callback) {
-        let sql = `SELECT enrollStudent(?, ?, ?)`;
-        connection.query(sql, [studentId, classId, grade], (err, results) => {
-            if (err) return callback(err);
-
-            callback(null, `Student enrolled in class!`);
+    async enrollStudent(studentId, classId, grade, callback) {
+        let sql = `SELECT enrollStudent(?, ?, ?) AS id`;
+        return new Promise((resolve, reject) => {
+            connection.execute(sql, [studentId, classId, grade], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0].id);
+            });
         });
     }
 }
