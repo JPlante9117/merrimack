@@ -24,7 +24,7 @@ class StudentClasses {
         ) VALUES (?, ?, ?)`;
         connection.query(sql, [studentId, classId, grade], (err, results) => {
             if (err) return callback(err);
-            callback(null, `Student Enrolled!`);
+            callback(null, results[0]);
         })
     }
 }

@@ -12,6 +12,8 @@ CREATE FUNCTION addStudent(
 RETURNS INT
 DETERMINISTIC
 BEGIN
+    DECLARE new_student_id INT;
+
     INSERT INTO Student(
         first_name,
         last_name,
@@ -26,7 +28,9 @@ BEGIN
         student_grade
     );
 
-    RETURN 1;
+    SET new_student_id = LAST_INSERT_ID();
+
+    RETURN new_student_id;
 END//
 
 -- Adding this for my ease of enrolling students for this week's assignment
@@ -40,6 +44,7 @@ DETERMINISTIC
 BEGIN
     DECLARE found_class_id INT;
     DECLARE found_student_id INT;
+    DECLARE enrollment_id INT;
 
     -- Search for student_id
     SELECT s.student_id INTO found_student_id
@@ -62,7 +67,9 @@ BEGIN
             class_id,
             grade
         );
-        RETURN 1;
+
+        SET enrollment_id = LAST_INSERT_ID();
+        RETURN enrollment_id;
     ELSE
         -- One or both not found, do not attempt insert
         RETURN 0; 

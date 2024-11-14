@@ -21,14 +21,15 @@ class ClassesDAL {
         ) VALUES (?, ?, ?)`;
         connection.query(sql, [subject, teacherId, roomNumber], (err, results) => {
             if (err) return callback(err);
-            callback(null, `Class ${subject} added!`);
+            callback(null, results[0]);
         })
     }
 
-    enrollStudent(studentId, classId, grade) {
+    enrollStudent(studentId, classId, grade, callback) {
         let sql = `SELECT enrollStudent(?, ?, ?)`;
         connection.query(sql, [studentId, classId, grade], (err, results) => {
             if (err) return callback(err);
+
             callback(null, `Student enrolled in class!`);
         });
     }

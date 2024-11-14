@@ -20,15 +20,15 @@ class TeacherDAL {
         ) VALUES (?, ?, ?)`;
         connection.query(sql, [firstName, lastName, emailAddress], (err, results) => {
             if (err) return callback(err);
-            callback(null, `Teacher ${firstName} ${lastName} added!`);
+            callback(null, results[0]);
         })
     }
 
     getId(firstName, lastName, callback) {
-        let sql = "SELECT getTeacherId(?, ?)";
+        let sql = "SELECT getTeacherId(?, ?) AS id";
         connection.query(sql, [firstName, lastName], (err, results) => {
             if (err) return callback(err);
-            callback(null, `Teacher ID: ${results[0]}`);
+            callback(null, results[0].id);
         })
     }
 
@@ -36,7 +36,7 @@ class TeacherDAL {
         let sql = "CALL getTeacherStudents(?, ?)";
         connection.query(sql, [firstName, lastName], (err, results) => {
             if (err) return callback(err);
-            callback(null, results);
+            callback(null, results[0]);
         })
     }
 }

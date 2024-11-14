@@ -10,10 +10,11 @@ class StudentDAL {
     }
 
     add(firstName, lastName, emailAddress, dob, gradeYear, callback){ 
-        let sql = "SELECT addStudent(?, ?, ?, ?, ?)";
+        let sql = "SELECT addStudent(?, ?, ?, ?, ?) AS id";
         connection.query(sql, [firstName, lastName, emailAddress, dob, gradeYear], (err, results) => {
             if (err) return callback(err);
-            callback(null, `Student ${firstName} ${lastName} added!`);
+            
+            callback(null, results[0].id);
         })
     }
 }
