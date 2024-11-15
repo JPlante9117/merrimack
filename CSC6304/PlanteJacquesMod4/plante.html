@@ -1,14 +1,66 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type="text/javascript" src="index.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+            const cleanupClasses = (e) => {
+                let el = e.target,
+                    classes = el.classList || [];
+
+                classes.remove('animating');
+                el.textContent = "I did move!";
+                el.removeEventListener('transitionend', cleanupClasses);
+            }
+
+            const animateBox = () => {
+                let animationBox = document.getElementById('animation-box'),
+                    classes = animationBox.classList;
+
+                animationBox.addEventListener('transitionend', cleanupClasses);
+                classes.add('animating');
+                classes.toggle('right');
+                animationBox.textContent = "I am moving!";
+            }
+
+            const toggleDarkmode = () => {
+                let body = document.body,
+                    button = document.getElementById('dm'),
+                    label = document.querySelector('.mode span'),
+                    classes = body.classList;
+
+                if (classes.contains('darkmode')) {
+                    classes.remove('darkmode');
+                    button.textContent = "Enable Darkmode";
+                    label.textContent = "Light";
+                } else {
+                    classes.add('darkmode');
+                    button.textContent = "Disable Darkmode";
+                    label.textContent = "Dark";
+                }
+            }
+        </script>
         <link rel="stylesheet" href="index.css">
     </head>
     <body>
         <div class="mode">Mode: <span>Light</span></div>
         <h1 class="title">Jacques' Week 4 Assignment</h1>
         <h2 class="subheading">Animations</h2>
-        <p class="description">Click the button below to move the box across the screen! Click it again to move it back.</p>
+        <p class="description">
+            Handling simple animations with CSS is easy. Utilizing the transition property, we can select
+            different CSS properties that we want to animate. In this case, we are looking at the boxes below.
+            We will focus on transitioning the <code class="code">left</code> and <code class="code">transform</code>
+            properties which at the sitting state are <code class="code">0%</code> and <code class="code">translateX(0%)</code>
+            respectively. Using JavaScript, we are going to toggle on and off a class called <code class="code">right</code>
+            which has alternative CSS that changes our properties to <code class="code">left: 100%;</code> and <code class="code">transform: translateX(100%);</code>
+        </p>
+        <p class="description">
+            Finally, setting the <code class="code">transition</code> property, we can tell the boxes to take a certain amount of time to complete
+            their change in properties. You can even specify different transition timings for each property by specifying the name of the property,
+            time, and easing.
+        </p>
+        <p class="description">
+            Give it a shot by clicking the button below!
+        </p>
         <button onclick="animateBox()">Animate Box</button>
         <div class="boxesWrapper">
             <div class="boxContainer">
@@ -19,8 +71,19 @@
             </div>
         </div>
 
-        <h2 class="subheading">Enable Darkmode</h2>
-        <p class="description">Click the button below to toggle on and off darkmode</p>
+        <h2 class="subheading">Toggling Darkmode</h2>
+        <p class="description">
+            The button below is a standard implementation of toggling darkmode. Simply put, we are adding a class <code class="code">darkmode</code>
+            to the body element when dark mode is enabled, and removing it when disabled. This allows us to create CSS selectors that have a specificity
+            that looks for elements that are children of a body tag with the class <code class="code">darkmode</code>.
+        </p>
+        <p class="description">
+            For example, we might have the selector <code class="code">body.darkmode button</code> which translates to "find all button tags within a body tag
+            with the class darkmode".
+        </p>
+        <p class="description">
+            Give it a shot by clicking the button below!
+        </p>
         <button id="dm" onclick="toggleDarkmode()">Enable Darkmode</button>
     </body>
 </html>
