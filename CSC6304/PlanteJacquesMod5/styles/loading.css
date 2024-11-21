@@ -1,0 +1,55 @@
+#maincontent .content-outline {
+    background: linear-gradient(90deg, #0d799308 0%, rgba(0,0,0,1) 3%, rgba(0,0,0,1) 97%, #0d799308 100%);
+    opacity: 0;
+    animation: fade-in 1s forwards 1s;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+/* Loading In */
+
+.abs-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loading {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+}
+
+.loading.loading-init .inner-anim {
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: var(--main-color);
+    height: 5px;
+    width: 5px;
+    justify-self: center;
+    opacity: 1;
+    animation: turn-on 1s forwards 1s;
+}
+
+.typing-container {
+    display: inline-block;
+    margin: auto;
+}
+
+.typed-out{
+    overflow: hidden;
+    border-right: 10px solid var(--main-color);
+    white-space: nowrap;
+    font-size: 1.6rem;
+    width: 0;
+    opacity: 0;
+    animation: fade-in 400ms forwards 2s, typing 1s steps(20, end) forwards 2.4s, blinking-cursor 400ms infinite 2.4s;
+}
+
+.loading:not(.loading-init) .typed-out {
+    animation: fade-in 400ms forwards, typing 1s steps(20, end) forwards .4s, blinking-cursor 400ms infinite .4s;
+}

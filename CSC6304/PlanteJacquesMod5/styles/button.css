@@ -1,0 +1,98 @@
+.menu_button_container {
+    opacity: 0;
+    animation: fade-in 0.5s ease forwards;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    height: 100dvh;
+    flex-direction: column;
+}
+
+.menu_button {
+    --base-delay: 100ms;
+
+    border: 1px solid var(--main-color);
+    background-color: black;
+    color: var(--main-color);
+    display: block;
+    padding: 20px 70px;
+    will-change: transform;
+    transform: perspective(200px) rotateX(35deg) translate3d(-100%, 5px, 25px);
+    opacity: 0;
+    animation: slidein-left 450ms ease-in-out forwards;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    margin-left: 0;
+    transition: color 150ms, background-color 150ms, margin-left 150ms;
+}
+
+.menu_button:nth-child(1) {
+    animation-delay: 0;
+}
+.menu_button:nth-child(2) {
+    animation-delay: calc(var(--base-delay) * 1);
+}
+.menu_button:nth-child(3) {
+    animation-delay: calc(var(--base-delay) * 2);
+}
+.menu_button:nth-child(4) {
+    animation-delay: calc(var(--base-delay) * 3);
+}
+.menu_button:nth-child(5) {
+    animation-delay: calc(var(--base-delay) * 4);
+}
+.menu_button:nth-child(6) {
+    animation-delay: calc(var(--base-delay) * 5);
+}
+.menu_button:nth-child(7) {
+    animation-delay: calc(var(--base-delay) * 6);
+}
+.menu_button:nth-child(8) {
+    animation-delay: calc(var(--base-delay) * 7);
+}
+.menu_button:nth-child(9) {
+    animation-delay: calc(var(--base-delay) * 8);
+}
+.menu_button:nth-child(10) {
+    animation-delay: calc(var(--base-delay) * 9);
+}
+
+.menu_button:hover {
+    background-color: var(--main-color);
+    color: black;
+    margin-left: min(50px, 10dvw);
+    z-index: 1;
+}
+
+.menu_button span {
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    display: block;
+}
+
+.back {
+    --main-color: #0d7993;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(200%);
+    transition: 150ms ease;
+
+    border: 1px solid var(--main-color);
+    background-color: black;
+    color: var(--main-color);
+    display: block;
+    padding: 20px 70px;
+}
+
+.back:hover {
+    background-color: var(--main-color);
+    color: black;
+    margin-right: min(20px, 10dvw);
+    z-index: 1;
+}
+
+.back.show {
+    transform: translateX(0);
+}
