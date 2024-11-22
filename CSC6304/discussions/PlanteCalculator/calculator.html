@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculator</title>
+  <style>
+    html {
+      cursor: none;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #001f00;
+      cursor: none;
+      overflow: hidden;
+    }
+    img.hand {
+      height: 600px;
+      width: 400px;
+      position: absolute;
+      pointer-events: none;
+    }
+    img.hand.clicking {
+      transform: translateY(2px) scaleY(0.9);
+      transform-origin: top center;
+    }
+    .calculator {
+      --calculator-border: #006400;
+      --calculator-bg: #003c00;
+
+      width: 240px;
+      border: 1px solid var(--calculator-border);
+      background-color: var(--calculator-bg);
+      border-radius: 5px;
+      box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+      margin: 0 auto;
+      padding: 10px;
+    }
+    input[type="text"] {
+      --input-bg: #008000;
+      --input-color: #39FF14;
+
+      color: var(--input-color);
+      width: 100%;
+      height: 40px;
+      text-align: right;
+      margin-bottom: 10px;
+      font-size: 18px;
+      padding: 5px;
+      border: none;
+      border-radius: 5px;
+      background-color: var(--input-bg);
+      box-sizing: border-box;
+    }
+    .btns-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 5px;
+    }
+    .btns-container button {
+      --button-bg: #008000;
+      --button-color: #39FF14;
+      --button-border: #006400;
+
+      width: 100%;
+      height: 50px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      border-bottom: 4px solid var(--button-border);
+      transition: border-bottom 200ms ease;
+      cursor: none;
+    }
+    .btns-container button:active {
+      border-bottom: 2px solid var(--button-border);
+    }
+  </style>
+  <script type="text/javascript">
+    function clearInput() {
+      document.getElementById("result").value = "";
+    }
+    function appendInput(value) {
+      document.getElementById("result").value += value;
+    }
+    function calculate() {
+      var input = document.getElementById("result").value;
+      try {
+        var result = eval(input);
+        document.getElementById("result").value = result;
+      } catch (error) {
+        document.getElementById("result").value = "Error";
+      }
+    }
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const cursorImage = document.getElementById('cursorImage');
+      if (cursorImage) {
+        document.addEventListener('mousemove', (event) => {
+          cursorImage.style.left = event.clientX - 135 + 'px';
+          cursorImage.style.top = event.clientY - 20 + 'px';
+        });
+        document.addEventListener('mousedown', (event) => {
+          cursorImage.classList.add('clicking');
+        });
+        document.addEventListener('mouseup', (event) => {
+          cursorImage.classList.remove('clicking');
+        })
+      }
+    })
+  </script>
+</head>
+<body>
+  <div class="calculator">
+    <img id="cursorImage" class="hand" src="./hand.png"/>
+    <input type="text" id="result" readonly>
+    <div class="btns-container">
+      <button onclick="clearInput()">C</button>
+      <button onclick="appendInput('7')">7</button>
+      <button onclick="appendInput('8')">8</button>
+      <button onclick="appendInput('9')">9</button>
+      <button onclick="appendInput('4')">4</button>
+      <button onclick="appendInput('5')">5</button>
+      <button onclick="appendInput('6')">6</button>
+      <button onclick="appendInput('1')">1</button>
+      <button onclick="appendInput('2')">2</button>
+      <button onclick="appendInput('3')">3</button>
+      <button onclick="appendInput('0')">0</button>
+      <button onclick="appendInput('.')">.</button>
+      <button onclick="appendInput('+')">+</button>
+      <button onclick="appendInput('-')">-</button>
+      <button onclick="appendInput('*')">*</button>
+      <button onclick="appendInput('/')">/</button>
+      <button onclick="appendInput('(')">(</button>
+      <button onclick="appendInput(')')">)</button>
+      <button onclick="calculate()">=</button>
+    </div>
+  </div>
+</body>
+</html>
