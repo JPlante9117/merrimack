@@ -1,0 +1,118 @@
+body {
+    font-family:'Courier New', Courier, monospace;
+}
+
+.content {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.table_wrapper {
+    background-color: #dfdfdf;
+    padding: 0.5rem;
+    display: inline-block;
+    border-radius: 6px;
+}
+
+table {
+    border-radius: 6px;
+    border-collapse: collapse;
+    padding: 0.5rem;
+}
+
+table th,
+table td {
+    text-align: center;
+    padding: 0.5rem 1rem;
+}
+
+table th:first-child,
+table td:first-child {
+    padding-left: 0.5rem;
+    border-radius: 10px 0 0 10px;
+}
+
+table th:last-child,
+table td:last-child {
+    padding-right: 0.5rem;
+    border-radius: 0 10px 10px 0;
+}
+
+table tr:hover td {
+    background-color: #f1f1f1;
+}
+
+.modal_container {
+    height: 100dvh;
+    width: 100dvw;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 6px;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    padding: 1rem;
+    width: 500px;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.modal_button_container {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+button {
+    background: white;
+    border: 1px solid #ccc;
+    border-bottom: 4px solid #ccc;
+    border-radius: 4px;
+    transition: 150ms ease;
+}
+
+button#add-student {
+    width: 100px;
+}
+
+.modal_button_container button[type="submit"] {
+    background: green;
+    color: white;
+    border-color: rgb(0, 96, 0)
+}
+
+button:active {
+    border-bottom: 2px solid #ccc;
+}
+
+input {
+    display: flex;
+    width: 100%;
+    border: 1px solid transparent;
+    background: #ccc;
+    border-radius: 2px;
+    font-size: 1rem;
+    padding: 0.25rem;
+}
+
+input.error_input {
+    border: 1px solid red;
+}
+
+.input_errors {
+    color: red;
+    font-size: 0.75rem;
+}
+
+.input_errors span {
+    display: block;
+}

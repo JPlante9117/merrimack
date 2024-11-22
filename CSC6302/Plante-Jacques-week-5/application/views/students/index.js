@@ -1,5 +1,8 @@
+const EMAIL_EXTENSIONS = ['.edu', '.com', '.gov', '.org', '.net', '.mil']
+
 const displayAllStudents = () => {
-    let table = document.getElementById('student_table');
+    let table = document.getElementById('student_table'),
+        tbody = table.getElementsByTagName('tbody')[0];
     fetch('http://localhost:3000/api/students').then(resp => {
         if (resp.ok) {
             return resp.json();
@@ -7,8 +10,8 @@ const displayAllStudents = () => {
             console.error(resp)
         }
     }).then(students => {
-        for (student of students) {
-            table.innerHTML += `
+        for (let student of students) {
+            tbody.innerHTML += `
                 <tr>
                     <td>
                         ${student.firstName}
@@ -42,14 +45,101 @@ const insertStudentIntoTable = (firstName, lastName, email) => {
     `;
 }
 
+const validateNewStudent = ({first_name, last_name, email_address, date_of_birth, student_grade}) => {
+    let hasErrors = false,
+        errorList = {
+        first_name    : [],
+        last_name     : [],
+        email_address : [],
+        date_of_birth : [],
+        student_grade : []
+    };
+
+    if (!first_name) {
+        hasErrors = true;
+        errorList.first_name.push('Student must have first name');
+    }
+
+    if (!last_name) {
+        hasErrors = true;
+        errorList.last_name.push('Student must have last name');
+    }
+
+    if (!email_address) {
+        hasErrors = true;
+        errorList.email_address.push('Student must provide an email address');
+    }
+
+    if (!email_address.includes('@') || !EMAIL_EXTENSIONS.some(ex => email_address.includes(ex))) {
+        hasErrors = true;
+        errorList.email_address.push('Invalid email address');
+    }
+
+    if (!date_of_birth) {
+        hasErrors = true;
+        errorList.date_of_birth.push('Student must provide a date of birth');
+    }
+
+    if (!new Date(date_of_birth)){
+        hasErrors = true;
+        errorList.date_of_birth.push('Date of birth must be a valid date');
+    }
+
+    if (!student_grade) {
+        hasErrors = true;
+        errorList.student_grade.push('Student must be in a grade');
+    }
+
+    if (!parseInt(student_grade)) {
+        hasErrors = true;
+        errorList.student_grade.push('Student grade must be an integer');
+    }
+
+    return {hasErrors, errorList};
+}
+
+const displayFormErrors = (errorList) => {
+    Object.keys(errorList).forEach(key => {
+        let thisErrorList = errorList[key],
+            hasErrors     = thisErrorList.length > 0,
+            input         = document.querySelector(`input[name="${key}"]`),
+            errorField    = document.getElementById(`errors_${key}`);
+
+        if (hasErrors) {
+            let errorMsg = ''
+            input.classList.add('error_input');
+            thisErrorList.forEach(err => {
+                errorMsg += `<span>${err}</span>`;
+            });
+            errorField.innerHTML = errorMsg;
+        } else {
+            input.classList.remove('error_input');
+            errorField.innerHTML = ''
+        }
+    })
+}
+
 const addStudent = (event) => {
     event.preventDefault();
     const form        = event.target,
         first_name    = form.querySelector('input[name="first_name"]').value,
         last_name     = form.querySelector('input[name="last_name"').value,
         email_address = form.querySelector('input[name="email_address"').value,
-        date_of_birth = form.querySelector('input[name="dob"').value,
-        student_grade = form.querySelector('input[name="grade"').value;
+        date_of_birth = form.querySelector('input[name="date_of_birth"').value,
+        student_grade = form.querySelector('input[name="student_grade"').value;
+
+    let {hasErrors, errorList} = validateNewStudent({
+        first_name,
+        last_name,
+        email_address,
+        date_of_birth,
+        student_grade
+    });
+
+    if (hasErrors) {
+        displayFormErrors(errorList);
+        return;
+    }
 
     fetch('/api/students', {
         method: 'POST',
@@ -67,9 +157,7 @@ const addStudent = (event) => {
         if (!resp.ok) {
             throw new Error(resp.status, resp.statusText)
         }
-        let modal = document.getElementById('add-student');
-
-        document.removeChild(modal);
+        closeStudentModal()
     
         console.log("Student added successfully!");
 
@@ -79,35 +167,55 @@ const addStudent = (event) => {
     })
 }
 
+const closeStudentModal = () => {
+    let modal = document.getElementsByClassName('modal_container')[0];
+
+    document.body.removeChild(modal);
+}
+
 const openStudentModal = () => {
     let modal = document.createElement('div');
-    modal.role = 'modal';
-    modal.classList.add('modal');
+    modal.classList.add('modal_container');
+
+    let existingModal = document.getElementById('add-student-modal');
+
+    if (existingModal) {
+        // Do not add another modal.
+        return;
+    }
 
     modal.innerHTML = `
-        <h1>Add a Student</h1>
-        <form id="add-student-form">
-            <label for="first_name">First Name:</label>
-            <input type="text" name="first_name" placeholder="First Name" />
-            <label for="last_name">Last Name:</label>
-            <input type="text" name="last_name" placeholder="Last Name" />
-            <label for="email_address">Email:</label>
-            <input type="text" name="email_address" placeholder="Email" />
-            <label for="dob">Date of Birth:</label>
-            <input type="date" name="dob" placeholder="Birthday" />
-            <label for="grade">Student Grade:</label>
-            <input type="text" name="grade" placeholder="Grade in School" />
-            <button type="submit">Add Student</button>
-        </form>
+        <div id="add-student-modal" class="modal" role="modal">
+            <h1>Add a Student</h1>
+            <form id="add-student-form">
+                <label for="first_name">First Name:</label>
+                <input type="text" name="first_name" placeholder="Ex: Johnny" />
+                <div id="errors_first_name" class="input_errors"></div>
+                <label for="last_name">Last Name:</label>
+                <input type="text" name="last_name" placeholder="Ex: Spells" />
+                <div id="errors_last_name" class="input_errors"></div>
+                <label for="email_address">Email:</label>
+                <input type="text" name="email_address" placeholder="Ex: spellsj@merrimack.edu" />
+                <div id="errors_email_address" class="input_errors"></div>
+                <label for="date_of_birth">Date of Birth:</label>
+                <input type="date" name="date_of_birth" />
+                <div id="errors_date_of_birth" class="input_errors"></div>
+                <label for="student_grade">Student Grade:</label>
+                <input type="number" name="student_grade" placeholder="Ex: 10" />
+                <div id="errors_student_grade" class="input_errors"></div>
+                <div class="modal_button_container">
+                    <button type="submit">Add Student</button>
+                    <button onclick="closeStudentModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
     `;
 
-    console.log(modal);
-
     document.body.appendChild(modal);
+    let form = modal.querySelector('#add-student-form');
+    form.addEventListener('submit', addStudent)
 }
 
 document.addEventListener('DOMContentLoaded', (e) => {
     displayAllStudents();
-    const form = document.getElementById('add-student-form');
-    form.addEventListener('submit', addStudent);
 });

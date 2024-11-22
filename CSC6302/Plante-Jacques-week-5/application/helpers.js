@@ -12,7 +12,12 @@ const isString = (item) => {
     return typeof item === 'string';
 }
 
+const isEmpty = (arr) => {
+    return arr.length === 0;
+}
+
 export {
     checkArguments,
-    isString
+    isString,
+    isEmpty
 }
