@@ -7,7 +7,7 @@ class ClassesDAL {
         FROM Classes
         WHERE class_id = ?`;
         return new Promise((resolve, reject) => {
-            connection.execute(sql, [class_id], (err, results) => {
+            connection.query(sql, [class_id], (err, results) => {
                 if (err) return reject(err);
                 resolve(results[0]);
             });
@@ -22,7 +22,7 @@ class ClassesDAL {
             room_number
         ) VALUES (?, ?, ?)`;
         return new Promise((resolve, reject) => {
-            connection.execute(sql, [subject, teacherId, roomNumber], (err, results) => {
+            connection.query(sql, [subject, teacherId, roomNumber], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -32,7 +32,7 @@ class ClassesDAL {
     async enrollStudent(studentId, classId, grade, callback) {
         let sql = `SELECT enrollStudent(?, ?, ?) AS id`;
         return new Promise((resolve, reject) => {
-            connection.execute(sql, [studentId, classId, grade], (err, results) => {
+            connection.query(sql, [studentId, classId, grade], (err, results) => {
                 if (err) return reject(err);
                 resolve(results[0].id);
             });

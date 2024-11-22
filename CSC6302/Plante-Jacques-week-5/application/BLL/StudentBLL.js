@@ -47,7 +47,7 @@ class StudentBLL {
     
             return student;
         } catch (err) {
-            console.log("StudentBLL::createStudent::Error: ", err);
+            throw new Error(`StudentBLL::createStudent::Error: ${err.message}`);
         }
     }
 

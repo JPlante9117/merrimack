@@ -12,6 +12,8 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+// Allow service of static files in the ../views directory
+app.use(express.static(path.join(__dirname, '../views')));
 
 // Basic route to fetch all students
 app.use('/api', apiRoutes);

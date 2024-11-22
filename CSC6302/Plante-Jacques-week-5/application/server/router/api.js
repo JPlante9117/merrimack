@@ -13,4 +13,26 @@ router.get("/students", async (req, res) => {
     }
 });
 
+router.post("/students", async(req, res) => {
+    try {
+        const {
+            first_name,
+            last_name,
+            email_address,
+            date_of_birth,
+            student_grade
+        } = req.body;
+
+        let addedStudent = await StudentBLL.createStudent(first_name, last_name, email_address, date_of_birth, student_grade);
+
+        res.json({
+            "message" : "Student Added Successfully",
+            "payload" : addedStudent
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to add student' });
+    }
+})
+
 export default router;

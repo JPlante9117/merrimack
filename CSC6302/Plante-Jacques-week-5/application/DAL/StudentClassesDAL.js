@@ -10,7 +10,7 @@ class StudentClasses {
         FROM StudentClasses
         WHERE student_class_id = ?`;
         return new Promise((resolve, reject) => {
-            connection.execute(sql, [studentClassId], (err, results) => {
+            connection.query(sql, [studentClassId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results[0]);
             });
@@ -25,7 +25,7 @@ class StudentClasses {
             grade
         ) VALUES (?, ?, ?)`;
         return new Promise((resolve, reject) => {
-            connection.execute(sql, [studentId, classId, grade], (err, results) => {
+            connection.query(sql, [studentId, classId, grade], (err, results) => {
                 if (err) return reject(err);
                 resolve(results[0]);
             })
