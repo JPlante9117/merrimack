@@ -7,12 +7,17 @@
   <link rel="stylesheet" href="../base.css">
 </head>
 <body>
+    <div class="navigation">
+        <a class="navigation_active" href="/students">Students</a>
+        <a href="/rosters">Rosters</a>
+        <a href="/classes">Classes</a>
+    </div>
     <div class="content">
         <h1>Students</h1>
         <button id="add-student" onclick="openStudentModal()">Add a Student</button>
         <div class="table_wrapper">
             <table id="student_table">
-                <tbody>
+                <thead>
                     <tr>
                         <th>
                             First Name
@@ -24,6 +29,8 @@
                             Email Address
                         </th>
                     </tr>
+                </thead>
+                <tbody>
                 </tbody>
             </table>
         </div>

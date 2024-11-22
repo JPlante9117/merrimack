@@ -24,7 +24,7 @@ class StudentBLL {
     
             return student;
         } catch (err) {
-            console.log("StudentBLL::getStudent::Error: ", err);
+            throw new Error(`StudentBLL::getStudent::Error: ${err}`);
         }
     }
 
@@ -66,7 +66,7 @@ class StudentBLL {
 
             return students;
         } catch (err) {
-            console.log("StudentBLL::getAllStudentsBasic::Error: ", err);
+            throw new Error(`StudentBLL::getAllStudentsBasic::Error: ${err}`);
         }
     }
 }

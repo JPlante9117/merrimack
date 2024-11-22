@@ -1,5 +1,6 @@
 import express from "express";
 import StudentBLL from "../../BLL/StudentBLL.js";
+import TeacherBLL from "../../BLL/TeacherBLL.js";
 
 const router = express.Router();
 
@@ -33,6 +34,29 @@ router.post("/students", async(req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Failed to add student' });
     }
-})
+});
+
+router.get('/teachers', async (req, res) => {
+    try {
+        const rows = await TeacherBLL.getTeachers();
+        res.json(rows);
+    } catch (error) {
+        console.error("Error fetching teachers:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+router.get('/getTeachersStudents', async (req, res) => {
+    try {
+        let firstName = req.query.fname,
+            lastName  = req.query.lname;
+
+        const rows = await TeacherBLL.getStudents(firstName, lastName);
+        res.json(rows);
+    } catch (error) {
+        console.error("Error getting students: ", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 export default router;

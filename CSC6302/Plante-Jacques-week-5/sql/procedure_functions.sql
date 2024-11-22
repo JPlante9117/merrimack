@@ -102,7 +102,7 @@ BEGIN
     -- call to our above function declaration
     SET teacher_id = getTeacherId(first_name, last_name);
 
-    SELECT s.*
+    SELECT s.*, c.*
     FROM Student s
     JOIN StudentClasses sc ON s.student_id = sc.student_id
     JOIN Classes c ON sc.class_id = c.class_id

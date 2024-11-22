@@ -1,5 +1,6 @@
 import TeacherDAL from '../DAL/TeacherDAL.js';
 import { Student } from './StudentBLL.js';
+import { Class } from './ClassesBLL.js';
 import { checkArguments, isString } from '../helpers.js';
 
 export class Teacher {
@@ -22,7 +23,7 @@ class TeacherBLL {
     
             return teacher;
         } catch (err) {
-            console.log("TeacherBLL::getTeacher::Error: ", err);
+            throw new Error(`TeacherBLL::getTeacher::Error: ${err}`);
         }
     }
 
@@ -36,7 +37,7 @@ class TeacherBLL {
     
             return id;
         } catch (err) {
-            console.log("TeacherBLL::getTeacherId::Error: ", err);
+            throw new Error(`TeacherBLL::getTeacherId::Error: ${err}`);
         }
     }
 
@@ -58,7 +59,7 @@ class TeacherBLL {
     
             return teacher;
         } catch (err) {
-            console.log("TeacherBLL::createTeacher::Error: ", err);
+            throw new Error(`TeacherBLL::createTeacher::Error: ${err}`);
         }
     }
 
@@ -76,14 +77,34 @@ class TeacherBLL {
             let studentsResp = await TeacherDAL.getStudents(firstName, lastName),
                 studentsArr = [];
     
-            studentsResp.forEach(student => {
-                studentsArr.push(new Student(student))
+            studentsResp.forEach(payload => {
+                let student = new Student(payload),
+                    studentClass= new Class(payload);
+
+                student.subject = studentClass.subject;
+                student.roomNumber = studentClass.room_number;
+                studentsArr.push(student)
             });
     
             return studentsArr;
         } catch (err) {
-            console.log("TeacherBLL::getStudents::Error: ", err);
+            throw new Error(`TeacherBLL::getStudents::Error: ${err}`);
         } 
+    }
+
+    async getTeachers() {
+        try {
+            let teachersResp = await TeacherDAL.getTeachers(),
+                teachers = []
+
+            for (let teacher of teachersResp) {
+                teachers.push(new Teacher(teacher));
+            }
+
+            return teachers;
+        } catch (err) {
+            throw new Error(`TeacherBLL::getTeachers::Error: ${err}`);
+        }
     }
 }
 

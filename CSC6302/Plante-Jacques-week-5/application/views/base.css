@@ -1,18 +1,27 @@
 body {
-    font-family:'Courier New', Courier, monospace;
+    background-color: rgb(200, 200, 255);
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+h1 {
+    font-size: 1.5rem;
 }
 
 .content {
     display: inline-flex;
     flex-direction: column;
     gap: 0.5rem;
+    padding: 0 2rem;
 }
 
 .table_wrapper {
-    background-color: #dfdfdf;
-    padding: 0.5rem;
+    background-color: rgb(230, 230, 255);
+    padding: 0 0.5rem 0.5rem;
     display: inline-block;
     border-radius: 6px;
+    max-height: 300px;
+    overflow-y: scroll;
 }
 
 table {
@@ -21,26 +30,30 @@ table {
     padding: 0.5rem;
 }
 
+table thead {
+    position: sticky;
+    top: 0;
+    background: rgb(154, 154, 255);
+}
+
 table th,
 table td {
     text-align: center;
     padding: 0.5rem 1rem;
 }
 
-table th:first-child,
 table td:first-child {
     padding-left: 0.5rem;
     border-radius: 10px 0 0 10px;
 }
 
-table th:last-child,
 table td:last-child {
     padding-right: 0.5rem;
     border-radius: 0 10px 10px 0;
 }
 
 table tr:hover td {
-    background-color: #f1f1f1;
+    background-color: rgb(215, 200, 255);
 }
 
 .modal_container {
@@ -59,7 +72,7 @@ table tr:hover td {
     transform: translate(-50%, -50%);
     border-radius: 6px;
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
-    background-color: white;
+    background-color: rgb(200, 200, 255);
     padding: 1rem;
     width: 500px;
     max-width: 90%;
@@ -73,9 +86,9 @@ table tr:hover td {
 }
 
 button {
-    background: white;
-    border: 1px solid #ccc;
-    border-bottom: 4px solid #ccc;
+    background: rgb(230, 230, 255);
+    border: 1px solid rgb(160, 160, 255);
+    border-bottom: 4px solid rgb(160, 160, 255);
     border-radius: 4px;
     transition: 150ms ease;
 }
@@ -91,17 +104,21 @@ button#add-student {
 }
 
 button:active {
-    border-bottom: 2px solid #ccc;
+    border-bottom: 2px solid rgb(160, 160, 255);
 }
 
 input {
     display: flex;
     width: 100%;
     border: 1px solid transparent;
-    background: #ccc;
+    background: rgb(230, 230, 255);
     border-radius: 2px;
     font-size: 1rem;
     padding: 0.25rem;
+}
+
+select {
+    width: 150px;
 }
 
 input.error_input {
@@ -115,4 +132,25 @@ input.error_input {
 
 .input_errors span {
     display: block;
+}
+
+.navigation {
+    padding: 0.5rem 0.5rem 0;
+    height: 2rem;
+    font-size: 0.875rem;
+    background-color: rgb(178, 178, 228);
+    display: flex;
+    align-items: flex-end;
+}
+
+.navigation a {
+    padding: 0.5rem;
+    text-decoration: none;
+    color: black;
+    // background-color: rgb(200, 200, 255);
+    border-radius: 4px 4px 0 0;
+}
+
+.navigation a.navigation_active {
+    background-color: rgb(200, 200, 255);
 }

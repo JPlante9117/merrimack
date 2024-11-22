@@ -11,4 +11,12 @@ router.get('/students', (req, res) => {
     res.sendFile(path.join(__dirname, '../../views/students', 'index.html'));
 });
 
+router.get('/rosters', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../views/teachers', 'index.html'));
+});
+
+router.get('/classes', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../views/classes', 'index.html'));
+});
+
 export default router;

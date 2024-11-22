@@ -47,6 +47,16 @@ class TeacherDAL {
             })
         });
     }
+
+    async getTeachers() {
+        let sql = "SELECT * FROM Teacher";
+        return new Promise((resolve, reject) => {
+            connection.query(sql, [], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    }
 }
 
 export default new TeacherDAL();
