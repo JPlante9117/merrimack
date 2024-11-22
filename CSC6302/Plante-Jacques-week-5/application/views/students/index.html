@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Students</title>
+  <script>
+    document.addEventListener('DOMContentLoaded', (e) => {
+        let table = document.getElementById('student_table');
+        fetch('http://localhost:3000/api/students').then(resp => {
+            if (resp.ok) {
+                return resp.json();
+            } else {
+                console.error(resp)
+            }
+        }).then(json => {
+            console.log(json);
+            for (student of json) {
+                table.innerHTML += `
+                    <tr>
+                        <td>
+                            ${student.firstName}
+                        </td>
+                        <td>
+                            ${student.lastName}
+                        </td>
+                        <td>
+                            ${student.emailAddress}
+                        </td>
+                    </tr>
+                `;
+            }
+        })
+    });
+  </script>
+</head>
+<body>
+  <h1>Students</h1>
+  <table id="student_table">
+    <!-- This will get populated? -->
+  </table>
+</body>
+</html>

@@ -50,6 +50,25 @@ class StudentBLL {
             console.log("StudentBLL::createStudent::Error: ", err);
         }
     }
+
+    async getAllStudentsBasic() {
+        try {
+            let allStudentsResp = await StudentDAL.getAllBasic(),
+                students = [];
+
+            allStudentsResp.forEach(student => {
+                students.push(new Student({
+                    first_name    : student.first_name,
+                    last_name     : student.last_name,
+                    email_address : student.email_address
+                }));
+            });
+
+            return students;
+        } catch (err) {
+            console.log("StudentBLL::getAllStudentsBasic::Error: ", err);
+        }
+    }
 }
 
 export default new StudentBLL();

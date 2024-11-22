@@ -12,8 +12,6 @@ CREATE FUNCTION addStudent(
 RETURNS INT
 DETERMINISTIC
 BEGIN
-    DECLARE new_student_id INT;
-
     INSERT INTO Student(
         first_name,
         last_name,
@@ -28,9 +26,7 @@ BEGIN
         student_grade
     );
 
-    SET new_student_id = LAST_INSERT_ID();
-
-    RETURN new_student_id;
+    RETURN LAST_INSERT_ID();
 END//
 
 -- Adding this for my ease of enrolling students for this week's assignment
