@@ -8,15 +8,15 @@ const __dirname = path.dirname(__filename);
 const router = express.Router();
 
 router.get('/students', (req, res) => {
-    res.render('students/index');
+    res.render('students');
 });
 
 router.get('/rosters', (req, res) => {
-    res.render('rosters/index');
+    res.render('rosters');
 });
 
 router.get('/classes', (req, res) => {
-    res.render('classes/index');
+    res.render('classes');
 });
 
 export default router;
