@@ -1,11 +1,13 @@
 # Jacques Plante CSC6302 Database Application
 
 ## Running instructions
-To run the main app.js file, simply put
+To run the app, simply put
 ```
-npm start
+npm install && npm start
 ```
 in the terminal
+
+Then hit http://localhost:3000/students for your baseline.
 
 ## DB Setup
 In the SQL folder, run the files in the following order:
