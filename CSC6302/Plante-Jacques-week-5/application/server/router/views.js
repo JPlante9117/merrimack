@@ -8,15 +8,15 @@ const __dirname = path.dirname(__filename);
 const router = express.Router();
 
 router.get('/students', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../views/students', 'index.html'));
+    res.render('students/index');
 });
 
 router.get('/rosters', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../views/teachers', 'index.html'));
+    res.render('rosters/index');
 });
 
 router.get('/classes', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../views/classes', 'index.html'));
+    res.render('classes/index');
 });
 
 export default router;

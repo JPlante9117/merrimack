@@ -51,22 +51,27 @@ class StudentBLL {
         }
     }
 
-    async getAllStudentsBasic() {
+    async getAllStudents() {
         try {
-            let allStudentsResp = await StudentDAL.getAllBasic(),
+            let allStudentsResp = await StudentDAL.getAll(),
                 students = [];
 
             allStudentsResp.forEach(student => {
-                students.push(new Student({
-                    first_name    : student.first_name,
-                    last_name     : student.last_name,
-                    email_address : student.email_address
-                }));
+                students.push(new Student(student));
             });
 
             return students;
         } catch (err) {
-            throw new Error(`StudentBLL::getAllStudentsBasic::Error: ${err}`);
+            throw new Error(`StudentBLL::getAllStudents::Error: ${err}`);
+        }
+    }
+
+    async getClasses(id) {
+        try {
+            let classesResp = await StudentDAL.getEnrolledClasses(id);
+            return classesResp;
+        } catch (err) {
+            throw new Error(`StudentBLL::getClasses::Error: ${err}`);
         }
     }
 }

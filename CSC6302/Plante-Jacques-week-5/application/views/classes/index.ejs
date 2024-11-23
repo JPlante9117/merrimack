@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Classes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/classes.js"></script>
+  <link rel="stylesheet" href="/base.css">
+</head>
+<body>
+    <% currentPage = 'classes' %>
+    <%- include('../partials/nav') %>
+    <div class="content">
+        <h1>Class Enrollment</h1>
+        <div class="select_wrapper">
+            Enrollment Info for: <select id="student_select" onchange="displayStudentClasses()">
+                <option value="">Select a Student</option>
+                <!-- will be populated by JS -->
+            </select>
+        </div>
+        <div class="table_wrapper">
+            <table id="class_table">
+                <thead>
+                    <tr>
+                        <th>
+                            Subject
+                        </th>
+                        <th>
+                            Room Number
+                        </th>
+                        <th>
+                            Teacher
+                        </th>
+                        <th>
+                            Grade
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,12 +1,13 @@
 import express from "express";
 import StudentBLL from "../../BLL/StudentBLL.js";
 import TeacherBLL from "../../BLL/TeacherBLL.js";
+import ClassesBLL from "../../BLL/ClassesBLL.js";
 
 const router = express.Router();
 
 router.get("/students", async (req, res) => {
     try {
-        const rows = await StudentBLL.getAllStudentsBasic();
+        const rows = await StudentBLL.getAllStudents();
         res.json(rows);
     } catch (error) {
         console.error("Error fetching students:", error);
@@ -58,5 +59,17 @@ router.get('/getTeachersStudents', async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+router.get('/enrollment', async (req, res) => {
+    try {
+        let studentId = req.query.studentId;
+
+        const rows = await StudentBLL.getClasses(studentId);
+        res.json(rows);
+    } catch (error) {
+        console.log("Error getting classes: ", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
 
 export default router;
