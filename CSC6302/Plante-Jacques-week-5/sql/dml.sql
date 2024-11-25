@@ -3,41 +3,11 @@ INSERT INTO Teacher (
     first_name,
     last_name,
     email_address
-) VALUES (
-    'Alexandria',
-    'Plante',
-    'planteale@merrimack.edu'
-);
-
-INSERT INTO Teacher (
-    first_name,
-    last_name,
-    email_address
-) VALUES (
-    'Johnathon',
-    'UConn',
-    'uconnjo@merrimack.edu'
-);
-
-INSERT INTO Teacher (
-    first_name,
-    last_name,
-    email_address
-) VALUES (
-    'Lou',
-    'Wilson',
-    'wilsonlou@merrimack.edu'
-);
--- START WEEK 3 ADD TEACHER
-INSERT INTO Teacher (
-    first_name,
-    last_name,
-    email_address
-) VALUES (
-    'Andrew',
-    'Hill',
-    'hilland@merrimack.edu'
-);
+) VALUES
+    ( 'Alexandria', 'Plante', 'planteale@merrimack.edu'),
+    ('Johnathon', 'UConn', 'uconnjo@merrimack.edu'),
+    ('Lou', 'Wilson', 'wilsonlou@merrimack.edu'),
+    ('Andrew', 'Hill', 'hilland@merrimack.edu');
 -- END WEEK 3 ADD TEACHER
 
 -- WEEK 3 ADDSTUDENT FUNCTION
@@ -77,67 +47,41 @@ INSERT INTO Classes (
     subject,
     teacher_id,
     room_number
-) VALUES (
-    'Math',
-    1,
-    204
-);
-INSERT INTO Classes (
-    subject,
-    teacher_id,
-    room_number
-) VALUES (
-    'English',
-    2,
-    102
-);
-INSERT INTO Classes (
-    subject,
-    teacher_id,
-    room_number
-) VALUES (
-    'Science',
-    3,
-    313
-);
-INSERT INTO Classes (
-    subject,
-    teacher_id,
-    room_number
-) VALUES (
-    'History',
-    4,
-    008
-);
+) VALUES
+    ('Math', 1, 204),
+    ('English', 2, 102),
+    ('Science', 3, 313),
+    ('History', 4, 008);
 -- END WEEK 3 ADD CLASSES
 
 -- Student Classes w/ Grades
-SELECT enrollStudent(1, 1, 'A');
-SELECT enrollStudent(2, 1, 'B');
-SELECT enrollStudent(3, 1, 'C');
-SELECT enrollStudent(4, 1, 'A');
-SELECT enrollStudent(5, 1, 'B');
-
-SELECT enrollStudent(1, 2, 'A');
-SELECT enrollStudent(2, 2, 'C');
-SELECT enrollStudent(3, 2, 'D');
-SELECT enrollStudent(4, 2, 'B');
-SELECT enrollStudent(5, 2, 'A');
-
-SELECT enrollStudent(6, 3, 'B');
-SELECT enrollStudent(7, 3, 'A');
-SELECT enrollStudent(8, 3, 'C');
-SELECT enrollStudent(9, 3, 'A');
-SELECT enrollStudent(10, 3, 'B');
-
-SELECT enrollStudent(11, 4, 'C');
-SELECT enrollStudent(12, 4, 'D');
-SELECT enrollStudent(13, 4, 'B');
-SELECT enrollStudent(14, 4, 'A');
-SELECT enrollStudent(15, 4, 'C');
-
-SELECT enrollStudent(16, 1, 'A');
-SELECT enrollStudent(17, 2, 'B');
-SELECT enrollStudent(18, 3, 'C');
-SELECT enrollStudent(19, 4, 'D');
-SELECT enrollStudent(20, 1, 'A');
+INSERT INTO StudentClasses(
+    student_id,
+    class_id,
+    class_grade
+) VALUES
+    (1, 1, 'A'),
+    (2, 1, 'B'),
+    (3, 1, 'C'),
+    (4, 1, 'A'),
+    (5, 1, 'B'),
+    (1, 2, 'A'),
+    (2, 2, 'C'),
+    (3, 2, 'D'),
+    (4, 2, 'B'),
+    (5, 2, 'A'),
+    (6, 3, 'B'),
+    (7, 3, 'A'),
+    (8, 3, 'C'),
+    (9, 3, 'A'),
+    (10, 3, 'B'),
+    (11, 4, 'C'),
+    (12, 4, 'D'),
+    (13, 4, 'B'),
+    (14, 4, 'A'),
+    (15, 4, 'C'),
+    (16, 1, 'A'),
+    (17, 2, 'B'),
+    (18, 3, 'C'),
+    (19, 4, 'D'),
+    (20, 1, 'A');
