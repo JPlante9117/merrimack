@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Forecast</title>
+    <link rel="stylesheet" href="forecast.css">
+</head>
+<body>
+    <h1>Weather Forecast</h1>
+    <form id="weather-form">
+        <label for="city">Chose a City:</label>
+        <select id="city" name="city" required>
+            <option value="">--Select--</option>
+            <option value="my_location">My Location</option>
+            <option value="New York">New York</option>
+            <option value="Boston">Boston</option>
+            <option value="Chicago">Chicago</option>
+            <option value="Washington">Washington</option>
+            <option value="Atlanta">Atlanta</option>
+            <option value="Orlando">Orlando</option>
+            <option value="Seattle">Seattle</option>
+            <option value="San Francisco">San Francisco</option>
+            <option value="Los Angeles">Los Angeles</option>
+        </select>
+        <button type="submit">Get Weather</button>
+    </form>
+    <script src="forecast.js"></script>
+    <div id="weather-info"></div>
+</body>
+</html>
