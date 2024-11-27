@@ -30,3 +30,34 @@ button {
     margin-top: 30px;
     font-size: 18px;
 }
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0%);
+    }
+
+    25% {
+        transform: translateY(-20%)
+    }
+
+    50% {
+        transform: translateY(0%);
+    }
+
+    100% {
+        transform: translateY(0%);
+    }
+}
+
+.anim-dot {
+    animation: bounce 1s ease infinite;
+    display: inline-block;
+}
+
+.anim-dot:nth-child(2) {
+    animation-delay: 75ms;
+}
+
+.anim-dot:nth-child(3) {
+    animation-delay: 150ms;
+}
