@@ -16,8 +16,8 @@ In the SQL folder, run the files in the following order:
 ```
 ddl.sql
 users.sql
-permissions.sql
 procedure_functions.sql
+permissions.sql
 dml.sql
 ```
 This should start your database cleanly and add some baseline data to play with
