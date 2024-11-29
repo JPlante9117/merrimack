@@ -46,7 +46,7 @@ class StudentDAL {
             connection, connectionConfig;
 
         try {
-            connectionConfig = getConfig(userType)
+            connectionConfig = getConfig(userType);
             connection = await mysql.createConnection(connectionConfig);
 
             const [results] = await connection.execute(sql, [firstName, lastName, emailAddress, dob, gradeYear]);

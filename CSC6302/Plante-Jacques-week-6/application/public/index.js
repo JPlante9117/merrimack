@@ -11,7 +11,6 @@ function selectCredentials (credentialType) {
         })
         .then(resp => resp.json())
         .then(json => {
-            console.log("my json", json)
             if (json.success) {
                 location.reload();
             }
@@ -24,7 +23,6 @@ function getInverseUser (currentUserType) {
 }
 
 function swapUserType (userType) {
-    console.log("Swapping user", userType)
     if (['read_only', 'modify_role'].includes(userType)) {
         let swappedUser = getInverseUser(userType);
         selectCredentials(swappedUser);

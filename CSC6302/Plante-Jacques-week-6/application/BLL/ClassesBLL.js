@@ -70,7 +70,7 @@ class ClassesBLL {
     
             return thisClass;
         } catch (err) {
-            throw new Error(`ClassesBLL::getClass::Error: ${err}`);
+            throw err;
         }
     }
 
@@ -92,7 +92,7 @@ class ClassesBLL {
 
             return thisClass;
         } catch (err) {
-            throw new Error(`ClassesBLL::createClass::Error: ${err}`);
+            throw err;
         }
     }
 
@@ -115,7 +115,7 @@ class ClassesBLL {
                 
             return `${student.firstName} ${student.lastName} enrolled in ${thisClass.subject}`;
         } catch (err) {
-            throw new Error(`ClassesBLL::enrollStudent::Error: ${err}`);
+            throw err;
         }
     }
 }

@@ -98,6 +98,25 @@ const validateNewStudent = ({first_name, last_name, email_address, date_of_birth
     return {hasErrors, errorList};
 }
 
+const getBadRespErrors = (err) => {
+    let errorList = {
+        primary       : [],
+        first_name    : [],
+        last_name     : [],
+        email_address : [],
+        date_of_birth : [],
+        student_grade : []
+    }
+
+    if (err.status == 403) {
+        errorList.primary.push('Permission Denied: You appear to not have access to this functionality');
+    } else if (err.status == 409) {
+        errorList.primary.push('Duplicate Student: This student either is already in the database, or the email address is shared with another student.');
+    }
+
+    return errorList;
+}
+
 const displayFormErrors = (errorList) => {
     Object.keys(errorList).forEach(key => {
         let thisErrorList = errorList[key],
@@ -106,15 +125,19 @@ const displayFormErrors = (errorList) => {
             errorField    = document.getElementById(`errors_${key}`);
 
         if (hasErrors) {
-            let errorMsg = ''
-            input.classList.add('error_input');
+            let errorMsg = '';
+            if (input) {
+                input.classList.add('error_input');
+            }
             thisErrorList.forEach(err => {
                 errorMsg += `<span>${err}</span>`;
             });
             errorField.innerHTML = errorMsg;
         } else {
-            input.classList.remove('error_input');
-            errorField.innerHTML = ''
+            if (input) {
+                input.classList.remove('error_input');
+            }
+            errorField.innerHTML = '';
         }
     })
 }
@@ -153,8 +176,10 @@ const addStudent = (event) => {
             date_of_birth,
             student_grade
         })
-    }).then(resp => {
+    }).then(async resp => {
         if (!resp.ok) {
+            errorList = getBadRespErrors(resp);
+            displayFormErrors(errorList)
             throw new Error(resp.status, resp.statusText)
         }
         closeStudentModal()
@@ -163,8 +188,8 @@ const addStudent = (event) => {
 
         insertStudentIntoTable(first_name, last_name, email_address);
     }).catch(error => {
-        console.error("Error: ", error);
-    })
+        console.error("Smigbop: ", error);
+    });
 }
 
 const closeStudentModal = () => {
@@ -188,6 +213,7 @@ const openStudentModal = () => {
         <div id="add-student-modal" class="modal" role="modal">
             <h1>Add a Student</h1>
             <form id="add-student-form">
+                <div id="errors_primary" class="input_errors"></div>
                 <label for="first_name">First Name:</label>
                 <input type="text" name="first_name" placeholder="Ex: Johnny" />
                 <div id="errors_first_name" class="input_errors"></div>

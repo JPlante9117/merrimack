@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.get('/students', (req, res) => {
     let userType = req?.session?.userType || '';
-    console.log(userType)
     if (!userType) {
         res.redirect('/login');
     } else {

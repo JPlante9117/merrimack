@@ -18,7 +18,7 @@ router.get("/students", async (req, res) => {
 
 router.post("/students", async(req, res) => {
     try {
-        let userType = req.session.userType;
+        let userType = req?.session?.userType;
         const {
             first_name,
             last_name,
@@ -28,14 +28,18 @@ router.post("/students", async(req, res) => {
         } = req.body;
 
         let addedStudent = await StudentBLL.createStudent(userType, first_name, last_name, email_address, date_of_birth, student_grade);
-
         res.json({
             "message" : "Student Added Successfully",
             "payload" : addedStudent
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to add student' });
+        if (error.code === 'ER_DUP_ENTRY') {
+            res.status(409).json({ error: 'Duplicate student found' });
+        } else if (error.code === 'ER_PROCACCESS_DENIED_ERROR') {
+            res.status(403).json({ error: 'Permission denied' });
+        } else {
+            res.status(500).json({ error: 'Internal server error' });
+        }
     }
 });
 

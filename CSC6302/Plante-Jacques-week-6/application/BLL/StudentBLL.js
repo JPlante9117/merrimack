@@ -16,7 +16,7 @@ class StudentBLL {
     async getStudent(userType, id) {
         try {
             if (!id) {
-                return new Error("ID required for search");
+                throw new Error("ID required for search");
             }
     
             let studentResp = await StudentDAL.read(userType, id),
@@ -24,7 +24,7 @@ class StudentBLL {
     
             return student;
         } catch (err) {
-            throw new Error(`StudentBLL::getStudent::Error: ${err}`);
+            throw err;
         }
     }
 
@@ -39,15 +39,15 @@ class StudentBLL {
             });
     
             if (isString(allArgumentsValid)) {
-                return new Error(`${allArgumentsValid} is required.`);
+                throw new Error(`${allArgumentsValid} is required.`);
             }
     
-            let studentResp = await StudentDAL.add(userType, firstName, lastName, emailAddress, dob, gradeYear),
-                student = await this.getStudent(studentResp);
+            let studentResp = await StudentDAL.add(userType, firstName, lastName, emailAddress, dob, gradeYear);
+            let student = await this.getStudent(userType, studentResp);
     
             return student;
         } catch (err) {
-            throw new Error(`StudentBLL::createStudent::Error: ${err.message}`);
+            throw err;
         }
     }
 
@@ -62,7 +62,7 @@ class StudentBLL {
 
             return students;
         } catch (err) {
-            throw new Error(`StudentBLL::getAllStudents::Error: ${err}`);
+            throw err;
         }
     }
 
@@ -71,7 +71,7 @@ class StudentBLL {
             let classesResp = await StudentDAL.getEnrolledClasses(userType, id);
             return classesResp;
         } catch (err) {
-            throw new Error(`StudentBLL::getClasses::Error: ${err}`);
+            throw err;
         }
     }
 }

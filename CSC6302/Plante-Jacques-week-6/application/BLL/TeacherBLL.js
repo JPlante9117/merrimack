@@ -90,7 +90,7 @@ class TeacherBLL {
     
             return studentsArr;
         } catch (err) {
-            throw new Error(`TeacherBLL::getStudents::Error: ${err}`);
+            throw err;
         } 
     }
 
@@ -105,7 +105,7 @@ class TeacherBLL {
 
             return teachers;
         } catch (err) {
-            throw new Error(`TeacherBLL::getTeachers::Error: ${err}`);
+            throw err;
         }
     }
 }
