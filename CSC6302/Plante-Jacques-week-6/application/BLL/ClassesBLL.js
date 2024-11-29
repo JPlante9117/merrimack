@@ -12,10 +12,10 @@ export class Class {
     }
 
     // Static method to handle async operations and create an instance
-    static async create({ class_id, subject, teacher_id, room_number }) {
+    static async create({ class_id, subject, teacher_id, room_number, userType }) {
         try {
             // Await the asynchronous operations to get student and class details
-            const teacher = await TeacherBLL.getTeacher(teacher_id);
+            const teacher = await TeacherBLL.getTeacher(userType, teacher_id);
 
             // Return a new instance of Class with the awaited data
             return new Class({
@@ -39,10 +39,10 @@ export class StudentClass {
     }
 
     // Static method to handle async operations and create an instance
-    static async create({ student_class_id, student_id, class_id, grade }) {
+    static async create({ student_class_id, student_id, class_id, grade, userType }) {
         try {
             // Await the asynchronous operations to get student and class details
-            const student = await StudentBLL.getStudent(student_id);
+            const student = await StudentBLL.getStudent(userType, student_id);
             const thisClass = await new ClassesBLL().getClass(class_id);
 
             // Return a new instance of StudentClass with the awaited data
@@ -59,14 +59,14 @@ export class StudentClass {
 }
 
 class ClassesBLL {
-    async getClass(id) {
+    async getClass(userType, id) {
         try {
             if (!id) {
                 return new Error("ID required for search");
             }
     
-            let classResp = await ClassesDAL.read(id),
-                thisClass = await Class.create(classResp);
+            let classResp = await ClassesDAL.read(userType, id),
+                thisClass = await Class.create(Object.assign(classResp, { userType }));
     
             return thisClass;
         } catch (err) {
@@ -74,7 +74,7 @@ class ClassesBLL {
         }
     }
 
-    async createClass(subject, teacherId, roomNumber) {
+    async createClass(userType, subject, teacherId, roomNumber) {
         try {
             let allArgumentsValid = checkArguments({
                 subject,
@@ -86,7 +86,7 @@ class ClassesBLL {
                 return new Error(`${allArgumentsValid} is required.`);
             }
     
-            let classResp = await ClassesDAL.add(subject, teacherId, roomNumber),
+            let classResp = await ClassesDAL.add(userType, subject, teacherId, roomNumber),
                 classId = classResp.insertId,
                 thisClass = await this.getClass(classId)
 
@@ -102,12 +102,13 @@ class ClassesBLL {
                 return new Error("Student and Class IDs required");
             }
     
-            let studentClassId = await ClassesDAL.enrollStudent(studentId, classId, grade),
+            let studentClassId = await ClassesDAL.enrollStudent(userType, studentId, classId, grade),
                 enrollment = await StudentClass.create({
                     student_class_id: studentClassId,
                     student_id: studentId,
                     class_id: classId,
-                    grade
+                    grade,
+                    userType
                 }),
                 student = enrollment.student || {},
                 thisClass = enrollment.class || {};

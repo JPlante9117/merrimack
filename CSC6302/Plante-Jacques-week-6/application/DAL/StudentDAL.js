@@ -1,12 +1,13 @@
 import mysql from 'mysql2/promise';
-import { readOnlyConfig, modifyConfig } from '../server/dbConfigs.js';
+import { getConfig } from '../server/dbConfigs.js';
 
 class StudentDAL {
-    async read(studentId) {
+    async read(userType, studentId) {
         const sql = "SELECT * FROM Student WHERE student_id = ?";
-        let connection;
+        let connection, connectionConfig;
         try {
-            connection = await mysql.createConnection(readOnlyConfig);
+            connectionConfig = getConfig(userType)
+            connection = await mysql.createConnection(connectionConfig);
     
             const [results] = await connection.execute(sql, [studentId]);
             return results;
@@ -20,12 +21,13 @@ class StudentDAL {
         }
     }
 
-    async getAll() {
+    async getAll(userType) {
         let sql = "SELECT * FROM Student",
-            connection;
+            connection, connectionConfig;
 
         try {
-            connection = await mysql.createConnection(readOnlyConfig);
+            connectionConfig = getConfig(userType)
+            connection = await mysql.createConnection(connectionConfig);
 
             const [results] = await connection.execute(sql)
             return results;
@@ -39,12 +41,13 @@ class StudentDAL {
         }
     }
 
-    async add(firstName, lastName, emailAddress, dob, gradeYear){ 
+    async add(userType, firstName, lastName, emailAddress, dob, gradeYear){ 
         let sql = "SELECT addStudent(?, ?, ?, ?, ?) AS id",
-            connection;
+            connection, connectionConfig;
 
         try {
-            connection = await mysql.createConnection(modifyConfig);
+            connectionConfig = getConfig(userType)
+            connection = await mysql.createConnection(connectionConfig);
 
             const [results] = await connection.execute(sql, [firstName, lastName, emailAddress, dob, gradeYear]);
             return results[0].id;
@@ -58,7 +61,7 @@ class StudentDAL {
         }
     }
 
-    async getEnrolledClasses(studentId) {
+    async getEnrolledClasses(userType, studentId) {
         let sql = `
             SELECT 
                 c.subject, 
@@ -71,10 +74,11 @@ class StudentDAL {
             LEFT JOIN Teacher t ON c.teacher_id = t.teacher_id
             WHERE s.student_id = ?
         `,
-            connection;
+            connection, connectionConfig;
 
         try {
-            connection = await mysql.createConnection(readOnlyConfig);
+            connectionConfig = getConfig(userType)
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [studentId]);
             return results;

@@ -1,16 +1,17 @@
 import mysql from 'mysql2/promise';
-import { readOnlyConfig, modifyConfig } from '../server/dbConfigs.js';
+import { getConfig } from '../server/dbConfigs.js';
 
 class TeacherDAL {
-    async read(teacherId) {
+    async read(userType, teacherId) {
         let sql = `
         SELECT *
         FROM Teacher
         WHERE teacher_id = ?`,
-        connection;
+        connection, connectionConfig;
 
         try {
-            connection = await mysql.createConnection(readOnlyConfig);
+            connectionConfig = getConfig(userType);
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [teacherId]);
             return results[0];
@@ -24,16 +25,17 @@ class TeacherDAL {
         }
     }
 
-    async add(firstName, lastName, emailAddress){ 
+    async add(userType, firstName, lastName, emailAddress){ 
         let sql = `INSERT INTO Teacher(
             first_name,
             last_name,
             email_address
         ) VALUES (?, ?, ?)`,
-            connection;
+            connection, connectionConfig;
 
         try {
-            connection = await mysql.createConnection(modifyConfig);
+            connectionConfig = getConfig(userType);
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [firstName, lastName, emailAddress]);
             return results;
@@ -47,12 +49,13 @@ class TeacherDAL {
         }
     }
 
-    async getId(firstName, lastName) {
+    async getId(userType, firstName, lastName) {
         let sql = "SELECT getTeacherId(?, ?) AS id",
-            connection;
+            connection, connectionConfig;
 
         try {
-            connection = await mysql.createConnection(readOnlyConfig);
+            connectionConfig = getConfig(userType);
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [firstName, lastName]);
             return results[0].id;
@@ -66,12 +69,13 @@ class TeacherDAL {
         }
     }
 
-    async getStudents(firstName, lastName) {
+    async getStudents(userType, firstName, lastName) {
         let sql = "CALL getTeacherStudents(?, ?)",
-            connection;
+            connection, connectionConfig;
 
         try {
-            connection = await mysql.createConnection(readOnlyConfig);
+            connectionConfig = getConfig(userType);
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [firstName, lastName]);
             return results[0];
@@ -85,12 +89,13 @@ class TeacherDAL {
         }
     }
 
-    async getTeachers() {
+    async getTeachers(userType) {
         let sql = "SELECT * FROM Teacher",
-            connection;
+            connection, connectionConfig;
 
         try {
-            connection = await mysql.createConnection(readOnlyConfig);
+            connectionConfig = getConfig(userType);
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql);
             return results;

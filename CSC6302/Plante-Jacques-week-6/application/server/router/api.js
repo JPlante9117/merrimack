@@ -7,7 +7,8 @@ const router = express.Router();
 
 router.get("/students", async (req, res) => {
     try {
-        const rows = await StudentBLL.getAllStudents();
+        let userType = req.session.userType;
+        const rows = await StudentBLL.getAllStudents(userType);
         res.json(rows);
     } catch (error) {
         console.error("Error fetching students:", error);
@@ -17,6 +18,7 @@ router.get("/students", async (req, res) => {
 
 router.post("/students", async(req, res) => {
     try {
+        let userType = req.session.userType;
         const {
             first_name,
             last_name,
@@ -25,7 +27,7 @@ router.post("/students", async(req, res) => {
             student_grade
         } = req.body;
 
-        let addedStudent = await StudentBLL.createStudent(first_name, last_name, email_address, date_of_birth, student_grade);
+        let addedStudent = await StudentBLL.createStudent(userType, first_name, last_name, email_address, date_of_birth, student_grade);
 
         res.json({
             "message" : "Student Added Successfully",
@@ -39,7 +41,8 @@ router.post("/students", async(req, res) => {
 
 router.get('/teachers', async (req, res) => {
     try {
-        const rows = await TeacherBLL.getTeachers();
+        let userType = req.session.userType;
+        const rows = await TeacherBLL.getTeachers(userType);
         res.json(rows);
     } catch (error) {
         console.error("Error fetching teachers:", error);
@@ -49,10 +52,11 @@ router.get('/teachers', async (req, res) => {
 
 router.get('/getTeachersStudents', async (req, res) => {
     try {
-        let firstName = req.query.fname,
+        let userType = req.session.userType,
+            firstName = req.query.fname,
             lastName  = req.query.lname;
 
-        const rows = await TeacherBLL.getStudents(firstName, lastName);
+        const rows = await TeacherBLL.getStudents(userType, firstName, lastName);
         res.json(rows);
     } catch (error) {
         console.error("Error getting students: ", error);
@@ -62,14 +66,30 @@ router.get('/getTeachersStudents', async (req, res) => {
 
 router.get('/enrollment', async (req, res) => {
     try {
+        let userType = req.session.userType;
         let studentId = req.query.studentId;
 
-        const rows = await StudentBLL.getClasses(studentId);
+        const rows = await StudentBLL.getClasses(userType, studentId);
         res.json(rows);
     } catch (error) {
         console.log("Error getting classes: ", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
+})
+
+router.post('/switchUser', async (req, res) => {
+    try {
+        let { userType } = req.body;
+        req.session.userType = userType;
+        res.json({success: true});
+    } catch (err) {
+        console.error("Error swapping users: ", err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+router.get('login', (req, res) => {
+    res.json({ success: true });
 })
 
 export default router;

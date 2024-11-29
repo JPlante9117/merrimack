@@ -18,7 +18,10 @@ const modifyConfig = {
     database: process.env.DB_NAME,
 };
 
+const getConfig = (userType) => {
+    return !userType ? {} : userType === 'read_only' ? readOnlyConfig : modifyConfig;
+}
+
 export {
-    readOnlyConfig,
-    modifyConfig
+    getConfig
 };

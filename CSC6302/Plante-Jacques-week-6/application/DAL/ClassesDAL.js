@@ -1,17 +1,17 @@
 import mysql from 'mysql2/promise';
-import { readOnlyConfig, modifyConfig } from '../server/dbConfigs.js';
+import { getConfig } from '../server/dbConfigs.js';
 
 class ClassesDAL {
-    async read(class_id) {
+    async read(userType, class_id) {
         let sql = `
             SELECT *
             FROM Classes
             WHERE class_id = ?
         `,
-            connection;
-
+        connection, connectionConfig;
         try {
-            connection = await mysql.createConnection(readOnlyConfig);
+            connectionConfig = getConfig(userType)
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [class_id]);
             return results[0];
@@ -25,7 +25,7 @@ class ClassesDAL {
         }
     }
 
-    async add(subject, teacherId, roomNumber){ 
+    async add(userType, subject, teacherId, roomNumber){ 
         let sql = `
             INSERT INTO Classes (
                 subject,
@@ -33,10 +33,10 @@ class ClassesDAL {
                 room_number
             ) VALUES (?, ?, ?)
         `,
-            connection;
-
+        connection, connectionConfig;
         try {
-            connection = await mysql.createConnection(modifyConfig);
+            connectionConfig = getConfig(userType)
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [subject, teacherId, roomNumber]);
             return results;
@@ -50,12 +50,12 @@ class ClassesDAL {
         }
     }
 
-    async enrollStudent(studentId, classId, grade) {
+    async enrollStudent(userType, studentId, classId, grade) {
         let sql = `SELECT enrollStudent(?, ?, ?) AS id`,
-            connection;
-
+        connection, connectionConfig;
         try {
-            connection = await mysql.createConnection(modifyConfig);
+            connectionConfig = getConfig(userType)
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [studentId, classId, grade]);
             return results[0].id;

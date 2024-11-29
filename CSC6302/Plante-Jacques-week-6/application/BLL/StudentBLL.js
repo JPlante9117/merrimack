@@ -13,13 +13,13 @@ export class Student {
 }
 
 class StudentBLL {
-    async getStudent(id) {
+    async getStudent(userType, id) {
         try {
             if (!id) {
                 return new Error("ID required for search");
             }
     
-            let studentResp = await StudentDAL.read(id),
+            let studentResp = await StudentDAL.read(userType, id),
                 student = new Student(studentResp);
     
             return student;
@@ -28,7 +28,7 @@ class StudentBLL {
         }
     }
 
-    async createStudent(firstName, lastName, emailAddress, dob, gradeYear) {
+    async createStudent(userType, firstName, lastName, emailAddress, dob, gradeYear) {
         try {
             let allArgumentsValid = checkArguments({
                 first_name: firstName,
@@ -42,7 +42,7 @@ class StudentBLL {
                 return new Error(`${allArgumentsValid} is required.`);
             }
     
-            let studentResp = await StudentDAL.add(firstName, lastName, emailAddress, dob, gradeYear),
+            let studentResp = await StudentDAL.add(userType, firstName, lastName, emailAddress, dob, gradeYear),
                 student = await this.getStudent(studentResp);
     
             return student;
@@ -51,9 +51,9 @@ class StudentBLL {
         }
     }
 
-    async getAllStudents() {
+    async getAllStudents(userType) {
         try {
-            let allStudentsResp = await StudentDAL.getAll(),
+            let allStudentsResp = await StudentDAL.getAll(userType),
                 students = [];
 
             allStudentsResp.forEach(student => {
@@ -66,9 +66,9 @@ class StudentBLL {
         }
     }
 
-    async getClasses(id) {
+    async getClasses(userType, id) {
         try {
-            let classesResp = await StudentDAL.getEnrolledClasses(id);
+            let classesResp = await StudentDAL.getEnrolledClasses(userType, id);
             return classesResp;
         } catch (err) {
             throw new Error(`StudentBLL::getClasses::Error: ${err}`);

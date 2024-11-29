@@ -12,13 +12,13 @@ export class Teacher {
     }
 }
 class TeacherBLL {
-    async getTeacher(id) {
+    async getTeacher(userType, id) {
         try {
             if (!id) {
                 return new Error("ID required for search");
             }
     
-            let teacherResp = await TeacherDAL.read(id),
+            let teacherResp = await TeacherDAL.read(userType, id),
                 teacher = new Teacher(teacherResp);
     
             return teacher;
@@ -27,13 +27,13 @@ class TeacherBLL {
         }
     }
 
-    async getTeacherId(firstName, lastName) {
+    async getTeacherId(userType, firstName, lastName) {
         try {
             if (!firstName || !lastName) {
                 return new Error("Both first and last name required for search");
             }
     
-            let id = await TeacherDAL.getId(firstName, lastName);
+            let id = await TeacherDAL.getId(userType, firstName, lastName);
     
             return id;
         } catch (err) {
@@ -41,7 +41,7 @@ class TeacherBLL {
         }
     }
 
-    async createTeacher(firstName, lastName, emailAddress) {
+    async createTeacher(userType, firstName, lastName, emailAddress) {
         try {
             let allArgumentsValid = checkArguments({
                 first_name: firstName,
@@ -53,7 +53,7 @@ class TeacherBLL {
                 return new Error(`${allArgumentsValid} is required.`);
             }
     
-            let teacherResp = await TeacherDAL.add(firstName, lastName, emailAddress),
+            let teacherResp = await TeacherDAL.add(userType, firstName, lastName, emailAddress),
                 teacherId = teacherResp.insertId,
                 teacher = await this.getTeacher(teacherId);
     
@@ -63,7 +63,7 @@ class TeacherBLL {
         }
     }
 
-    async getStudents(firstName, lastName) {
+    async getStudents(userType, firstName, lastName) {
         try {
             let allArgumentsValid = checkArguments({
                 first_name: firstName,
@@ -74,10 +74,12 @@ class TeacherBLL {
                 return new Error(`${allArgumentsValid} is required`);
             }
     
-            let studentsResp = await TeacherDAL.getStudents(firstName, lastName),
+            let studentsResp = await TeacherDAL.getStudents(userType, firstName, lastName),
                 studentsArr = [];
     
             studentsResp.forEach(payload => {
+                payload = Object.assign(payload, { userType });
+
                 let student = new Student(payload),
                     studentClass= new Class(payload);
 
@@ -92,9 +94,9 @@ class TeacherBLL {
         } 
     }
 
-    async getTeachers() {
+    async getTeachers(userType) {
         try {
-            let teachersResp = await TeacherDAL.getTeachers(),
+            let teachersResp = await TeacherDAL.getTeachers(userType),
                 teachers = []
 
             for (let teacher of teachersResp) {

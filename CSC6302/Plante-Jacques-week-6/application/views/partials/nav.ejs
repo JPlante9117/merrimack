@@ -2,4 +2,5 @@
     <a class="<%= currentPage == 'students' ? 'navigation_active' : '' %>" href="/students">Students</a>
     <a class="<%= currentPage == 'rosters' ? 'navigation_active' : '' %>" href="/rosters">Rosters</a>
     <a class="<%= currentPage == 'classes' ? 'navigation_active' : '' %>" href="/classes">Classes</a>
+    <span class="nav_user_type">Currently Using: <%= userType %><button onclick="swapUserType('<%= userType %>')">Swap</button></span>
 </nav>

@@ -1,16 +1,16 @@
 import mysql from 'mysql2/promise';
-import { readOnlyConfig, modifyConfig } from '../server/dbConfigs.js';
+import { getConfig } from '../server/dbConfigs.js';
 
 class StudentClasses {
-    async read(studentClassId) {
+    async read(userType, studentClassId) {
         let sql = `
         SELECT *
         FROM StudentClasses
         WHERE student_class_id = ?`,
-            connection;
-
+        connection, connectionConfig;
         try {
-            connection = await mysql.createConnection(readOnlyConfig);
+            connectionConfig = getConfig(userType)
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [studentClassId]);
             return results[0];
@@ -24,17 +24,17 @@ class StudentClasses {
         }
     }
 
-    async add(studentId, classId, grade){ 
+    async add(userType, studentId, classId, grade){ 
         let sql = `
         INSERT INTO StudentClasses (
             student_id,
             class_id,
             grade
         ) VALUES (?, ?, ?)`,
-            connection;
-
+        connection, connectionConfig;
         try {
-            connection = await mysql.createConnection(modifyConfig);
+            connectionConfig = getConfig(userType)
+            connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [studentId, classId, grade]);
             return results[0];
