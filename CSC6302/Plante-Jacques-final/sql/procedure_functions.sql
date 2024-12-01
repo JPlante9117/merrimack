@@ -70,7 +70,7 @@ BEGIN
     END WHILE;
 END//
 
-CREATE PROCEDURE GetBoardGamesWithDetails()
+CREATE PROCEDURE GetBoardGames()
 BEGIN
     SELECT
         bg.id, 
@@ -91,7 +91,7 @@ BEGIN
     GROUP BY bg.id;
 END//
 
-CREATE PROCEDURE getCategoryGames(category_id INT)
+CREATE PROCEDURE GetCategoryGames(category_id INT)
 READS SQL DATA
 BEGIN
     SET @sql = CONCAT('SELECT
@@ -118,7 +118,7 @@ BEGIN
     DEALLOCATE PREPARE stmt;
 END//
 
-CREATE PROCEDURE getPublisherGames(publisher_id INT)
+CREATE PROCEDURE GetPublisherGames(publisher_id INT)
 READS SQL DATA
 BEGIN
     SET @sql = CONCAT('SELECT
