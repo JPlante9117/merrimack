@@ -19,6 +19,7 @@ BEGIN
     DECLARE v_category_ids VARCHAR(255);
     DECLARE v_category_id INT;
     DECLARE v_category_name VARCHAR(50);
+    DECLARE v_bg_id INT;
 
     -- Insert or retrieve publisher ID
     INSERT INTO Publishers (name)
@@ -69,11 +70,9 @@ BEGIN
     END WHILE;
 END//
 
-CREATE PROCEDURE GetBoardGamesWithDetails(
-    IN p_filter_condition VARCHAR(255)
-)
+CREATE PROCEDURE GetBoardGamesWithDetails()
 BEGIN
-    SELECT 
+    SELECT
         bg.id, 
         bg.title, 
         bg.description, 
@@ -89,20 +88,62 @@ BEGIN
     JOIN Publishers p ON bg.publisher_id = p.id
     JOIN BoardGamesCategories bgc ON bg.id = bgc.bg_id
     JOIN Categories c ON bgc.cat_id = c.id
-    WHERE p_filter_condition
     GROUP BY bg.id;
 END//
 
 CREATE PROCEDURE getCategoryGames(category_id INT)
 READS SQL DATA
 BEGIN
-    CALL GetBoardGamesWithDetails('bgc.cat_id = ' || category_id);
+    SET @sql = CONCAT('SELECT
+        bg.id, 
+        bg.title, 
+        bg.description, 
+        bg.expansion, 
+        bg.min_players, 
+        bg.max_players, 
+        bg.time_to_play, 
+        bg.min_age, 
+        bg.complexity,
+        p.name AS publisher_name,
+        GROUP_CONCAT(c.name SEPARATOR \', \') AS categories
+    FROM BoardGames bg
+    JOIN Publishers p ON bg.publisher_id = p.id
+    JOIN BoardGamesCategories bgc ON bg.id = bgc.bg_id
+    JOIN Categories c ON bgc.cat_id = c.id
+    WHERE bgc.cat_id = ?
+    GROUP BY bg.id;');
+    PREPARE stmt FROM @sql;
+    SET @category_id = category_id;
+    EXECUTE stmt USING @category_id;
+    DEALLOCATE PREPARE stmt;
 END//
 
 CREATE PROCEDURE getPublisherGames(publisher_id INT)
 READS SQL DATA
 BEGIN
-    CALL GetBoardGamesWithDetails('p.id = ' || publisher_id);
+    SET @sql = CONCAT('SELECT
+        bg.id, 
+        bg.title, 
+        bg.description, 
+        bg.expansion, 
+        bg.min_players, 
+        bg.max_players, 
+        bg.time_to_play, 
+        bg.min_age, 
+        bg.complexity,
+        p.name AS publisher_name,
+        GROUP_CONCAT(c.name SEPARATOR \', \') AS categories
+    FROM BoardGames bg
+    JOIN Publishers p ON bg.publisher_id = p.id
+    JOIN BoardGamesCategories bgc ON bg.id = bgc.bg_id
+    JOIN Categories c ON bgc.cat_id = c.id
+    WHERE p.id = ?
+    GROUP BY bg.id;');
+
+    PREPARE stmt FROM @sql;
+    SET @publisher_id = publisher_id;
+    EXECUTE stmt USING @publisher_id;
+    DEALLOCATE PREPARE stmt;
 END//
 
 DELIMITER ;

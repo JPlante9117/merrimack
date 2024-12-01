@@ -51,7 +51,7 @@ INSERT INTO Publishers (
 -- Board Game Inserts
 INSERT INTO BoardGames (
     title,
-    description
+    description,
     publisher_id,
     expansion,
     min_players,

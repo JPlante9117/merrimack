@@ -3,11 +3,22 @@ CREATE DATABASE GAMES;
 
 USE GAMES;
 
+CREATE TABLE IF NOT EXISTS Publishers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS Categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) UNIQUE
+);
+
 CREATE TABLE IF NOT EXISTS BoardGames (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(50),
+    title VARCHAR(100),
     description VARCHAR(500),
-    FOREIGN KEY publisher_id REFERENCES Publishers(id),
+    publisher_id INT,
+    FOREIGN KEY (publisher_id) REFERENCES Publishers(id),
     expansion BOOLEAN,
     min_players INT,
     max_players INT,
@@ -16,18 +27,10 @@ CREATE TABLE IF NOT EXISTS BoardGames (
     complexity ENUM('Light', 'Medium Light', 'Medium', 'Medium Heavy', 'Heavy')
 );
 
-CREATE TABLE IF NOT EXISTS Publishers (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS Categories (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) UNIQUE
-);
-
 CREATE TABLE IF NOT EXISTS BoardGamesCategories (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    FOREIGN KEY bg_id REFERENCES BoardGames(id),
-    FOREIGN KEY cat_id REFERENCES Categories(id)
+    bg_id INT,
+    cat_id INT,
+    FOREIGN KEY (bg_id) REFERENCES BoardGames(id),
+    FOREIGN KEY (cat_id) REFERENCES Categories(id)
 );
