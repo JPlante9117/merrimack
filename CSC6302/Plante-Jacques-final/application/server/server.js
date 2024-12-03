@@ -17,7 +17,7 @@ app.set('views', path.join(__dirname, '../views'));
 
 app.use(express.json());
 app.use(session({
-    secret: 'super-secure-secret-key-nobody-will-guess-i-mean-honestly-who-would-think-it-was-just-this?',
+    secret: 'while-I-should-use-a-library-to-generate-a-key-for-this-for-now-I-have-this-super-secure-secret-key-nobody-will-guess-i-mean-honestly-who-would-think-it-was-just-this?',
     resave: false,
     saveUninitialized: false
 }));

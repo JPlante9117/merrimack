@@ -1,26 +1,20 @@
-const EMAIL_EXTENSIONS = ['.edu', '.com', '.gov', '.org', '.net', '.mil']
+const COMPLEXITIES = ['Light', 'Medium Light', 'Medium', 'Medium Heavy', 'Heavy'];
 
-const displayAllStudents = () => {
-    let table = document.getElementById('student_table'),
+const displayAllGames = () => {
+    let table = document.getElementById('game_table'),
         tbody = table.getElementsByTagName('tbody')[0];
-    fetch('http://localhost:3000/api/students').then(resp => {
+    fetch('http://localhost:3000/api/boardgames').then(resp => {
         if (resp.ok) {
             return resp.json();
         } else {
             console.error(resp)
         }
-    }).then(students => {
-        for (let student of students) {
+    }).then(boardgames => {
+        for (let boardgame of boardgames) {
             tbody.innerHTML += `
                 <tr>
                     <td>
-                        ${student.firstName}
-                    </td>
-                    <td>
-                        ${student.lastName}
-                    </td>
-                    <td>
-                        ${student.emailAddress}
+                        ${boardgame.title}
                     </td>
                 </tr>
             `;
@@ -28,71 +22,106 @@ const displayAllStudents = () => {
     });
 }
 
-const insertStudentIntoTable = (firstName, lastName, email) => {
+const insertGameIntoTable = (title) => {
     let table = document.getElementById('student_table');
     table.innerHTML += `
         <tr>
             <td>
-                ${firstName}
-            </td>
-            <td>
-                ${lastName}
-            </td>
-            <td>
-                ${email}
+                ${title}
             </td>
         </tr>
     `;
 }
 
-const validateNewStudent = ({first_name, last_name, email_address, date_of_birth, student_grade}) => {
+const validateNewGame = ({title, description, publisherName, minPlayers, maxPlayers, timeToPlay, complexity, categories = []}) => {
     let hasErrors = false,
         errorList = {
-        first_name    : [],
-        last_name     : [],
-        email_address : [],
-        date_of_birth : [],
-        student_grade : []
+        title         : [],
+        description   : [],
+        publisherName : [],
+        minPlayers    : [],
+        maxPlayers    : [],
+        timeToPlay    : [],
+        complexity    : [],
+        categories    : []
     };
 
-    if (!first_name) {
+    // Title
+    if (!title) {
         hasErrors = true;
-        errorList.first_name.push('Student must have first name');
+        errorList.title.push('Board Game must have a title');
     }
 
-    if (!last_name) {
+    if (title.length > 100) {
         hasErrors = true;
-        errorList.last_name.push('Student must have last name');
+        errorList.title.push('Board Game title exceeds max length of 100 characters');
     }
 
-    if (!email_address) {
+    // Description
+    if (!description) {
         hasErrors = true;
-        errorList.email_address.push('Student must provide an email address');
+        errorList.description.push('Board Game must have a description');
     }
 
-    if (!email_address.includes('@') || !EMAIL_EXTENSIONS.some(ex => email_address.includes(ex))) {
+    if (description.length > 500) {
         hasErrors = true;
-        errorList.email_address.push('Invalid email address');
+        errorList.description.push('Board Game description exceeds max length of 500 characters');
     }
 
-    if (!date_of_birth) {
+    if (!publisherName) {
         hasErrors = true;
-        errorList.date_of_birth.push('Student must provide a date of birth');
+        errorList.publisherName.push('Board Game must have a publisher');
     }
 
-    if (!new Date(date_of_birth)){
+    if (!minPlayers){
         hasErrors = true;
-        errorList.date_of_birth.push('Date of birth must be a valid date');
+        errorList.minPlayers.push('Board Game must have minimum players set. Can be same as max if fixed amount');
+    }
+    
+    if (!maxPlayers) {
+        hasErrors = true;
+        errorList.minPlayers.push('Board Game must have maximum players set. Can be same as minimum if fixed amount');
     }
 
-    if (!student_grade) {
+    if (typeof minPlayers !== 'number') {
         hasErrors = true;
-        errorList.student_grade.push('Student must be in a grade');
+        errorList.minPlayers.push('Minimum players must be a number');
     }
 
-    if (!parseInt(student_grade)) {
+    if (typeof maxPlayers !== 'number') {
         hasErrors = true;
-        errorList.student_grade.push('Student grade must be an integer');
+        errorList.maxPlayers.push('Maximum players must be a number');
+    }
+
+    if (minPlayers > maxPlayers) {
+        hasErrors = true;
+        errorList.minPlayers.push('Minimum players must be less than or equal to maximum players')
+        errorList.maxPlayers.push('Maximum players must be greater than or equal to minimum players')
+    }
+
+    if (!timeToPlay) {
+        hasErrors = true;
+        errorList.timeToPlay.push('Board Game must have a time to play');
+    }
+
+    if (typeof timeToPlay !== 'number') {
+        hasErrors = true;
+        errorList.timeToPlay.push('Time to play should be a number');
+    }
+
+    if (!complexity) {
+        hasErrors = true;
+        errorList.timeToPlay.push('Board Game must have some level of complexity');
+    }
+
+    if (!COMPLEXITIES.includes(complexity)) {
+        hasError = true;
+        errorList.complexity.push('Invalid complexity provided');
+    }
+
+    if (categories.length === 0) {
+        hasErrors = true;
+        errorList.categories.push('Board Game must belong to at least 1 category');
     }
 
     return {hasErrors, errorList};
@@ -151,7 +180,7 @@ const addStudent = (event) => {
         date_of_birth = form.querySelector('input[name="date_of_birth"').value,
         student_grade = form.querySelector('input[name="student_grade"').value;
 
-    let {hasErrors, errorList} = validateNewStudent({
+    let {hasErrors, errorList} = validateNewGame({
         first_name,
         last_name,
         email_address,

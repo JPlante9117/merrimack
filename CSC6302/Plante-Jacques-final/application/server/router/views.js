@@ -6,43 +6,43 @@ const __filename = fileURLToPath(import.meta.url);
 
 const router = express.Router();
 
-router.get('/students', (req, res) => {
+router.get('/boardgames', (req, res) => {
     let userType = req?.session?.userType || '';
     if (!userType) {
         res.redirect('/login');
     } else {
-        res.render('students', {
-            js : 'students',
-            title : 'Students',
-            currentPage: 'students',
+        res.render('boardgames', {
+            js : 'boardgames',
+            title : 'Board Games',
+            currentPage: 'boardgames',
             userType
         });
     }
 });
 
-router.get('/rosters', (req, res) => {
+router.get('/publishers', (req, res) => {
     let userType = req?.session?.userType || '';
     if (!userType) {
         res.redirect('/login');
     } else {
-        res.render('rosters', {
-            js : 'rosters',
-            title : 'Student Rosters',
-            currentPage: 'rosters',
+        res.render('publishers', {
+            js : 'publishers',
+            title : 'Publishers',
+            currentPage: 'publishers',
             userType
         });
     }
 });
 
-router.get('/classes', (req, res) => {
+router.get('/categories', (req, res) => {
     let userType = req?.session?.userType || '';
     if (!userType) {
         res.redirect('/login');
     } else {
-        res.render('classes', {
-            js : 'classes',
-            title : 'Student Classes',
-            currentPage: 'classes',
+        res.render('categories', {
+            js : 'categories',
+            title : 'Categories',
+            currentPage: 'categories',
             userType
         });
     }
