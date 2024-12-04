@@ -24,6 +24,21 @@ class PublisherBLL {
         }
     }
 
+    async getPublisherByName(userType, name) {
+        try {
+            if (!name) {
+                throw new Error("Name required for search");
+            }
+    
+            let publisherResp = await PublisherDAL.getByName(userType, name),
+                publisher = new Publisher(publisherResp);
+    
+            return publisher;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     // May not be used, as we create publishers with board games
     async createPublisher(userType, name) {
         try {

@@ -57,7 +57,7 @@ router.get('/login', (req, res) => {
             currentPage: 'login'
         });
     } else {
-        res.redirect('students');
+        res.redirect('boardgames');
     }
 });
 

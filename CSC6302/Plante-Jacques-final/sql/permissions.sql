@@ -15,6 +15,7 @@ GRANT SELECT
 ON GAMES.*
 TO 'read_role';
 -- Allow them to specifically execute the getTeacherStudents stored procedure
+GRANT EXECUTE ON PROCEDURE GetBoardGamesWithDetails TO 'read_role';
 GRANT EXECUTE ON PROCEDURE GetCategoryGames TO 'read_role';
 GRANT EXECUTE ON PROCEDURE GetPublisherGames TO 'read_role';
 
@@ -24,6 +25,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 -- Anywhere
 ON GAMES.*
 TO 'modify_role';
+GRANT EXECUTE ON PROCEDURE GetBoardGamesWithDetails TO 'modify_role';
 GRANT EXECUTE ON PROCEDURE GetCategoryGames TO 'modify_role';
 GRANT EXECUTE ON PROCEDURE GetPublisherGames TO 'modify_role';
 GRANT EXECUTE ON PROCEDURE AddBoardGame TO 'modify_role';

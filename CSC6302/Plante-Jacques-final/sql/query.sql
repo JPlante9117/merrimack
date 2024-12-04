@@ -11,4 +11,5 @@ CALL AddBoardGame(
     'Another New Category,Something Else'
 );
 
-SELECT * FROM BoardGames;
+SELECT * FROM Categories;
+CALL GetBoardGamesWithDetails('id = 3');

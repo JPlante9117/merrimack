@@ -1,11 +1,12 @@
 import { checkArguments, isString } from '../helpers.js';
 import BoardGameDAL from '../DAL/BoardGameDAL.js';
+import PublisherBLL from './PublisherBLL.js';
 
-class BoardGame {
-    constructor({id, title, desc, publisher, expansion, players, timeToPlay, minAge, complexity, categories}) {
+export class BoardGame {
+    constructor({id, title, description, publisher, expansion, players, timeToPlay, minAge, complexity, categories}) {
         this.id = id;
         this.title = title;
-        this.description = desc;
+        this.description = description;
         this.publisher = publisher;
         this.isExpansion = expansion;
         this.players = players;
@@ -17,29 +18,29 @@ class BoardGame {
 
     // Static method to handle async operations and create an instance
     static async create({
-        id, title, desc, publisherId, expansion, minPlayers, maxPlayers, timeToPlay, minAge, complexity, categories, userType
+        id, title, description, publisher_name, expansion, min_players, max_players, time_to_play, min_age, complexity, categories, userType
     }) {
         try {
             // Await the asynchronous operations to get student and class details
-            let publisher     = await PublisherBLL.getPublisher(userType, publisherId),
-                // Protect against minPlayers being larger than maxPlayers
-                sortedPlayers = [minPlayers, maxPlayers].sort(),
+            let publisher     = await PublisherBLL.getPublisherByName(userType, publisher_name),
+                // Protect against min_players being larger than max_players
+                sortedPlayers = [min_players, max_players].sort(),
                 players       = `${sortedPlayers[0]}-${sortedPlayers[1]}`;
 
-            if (minPlayers === maxPlayers) {
-                players = `${minPlayers}`;
+            if (min_players === max_players) {
+                players = `${min_players}`;
             }
 
             // Return a new instance of Class with the awaited data
             return new BoardGame({
                 id,
                 title,
-                desc,
+                description,
                 publisher,
                 expansion,
                 players,
-                timeToPlay,
-                minAge,
+                timeToPlay: time_to_play,
+                minAge: min_age,
                 complexity,
                 categories
             });
@@ -50,15 +51,15 @@ class BoardGame {
 }
 
 class BoardGameBLL {
-    async getAllGamesSimple(userType) {
+    async getAllGames(userType) {
         try {
-            let bgResp = await BoardGameDAL.getAllSimple(userType),
+            let bgResp = await BoardGameDAL.getAllDetailed(userType),
                 bgList = [];
 
-            bgResp.forEach(async bg => {
+            for (let bg of bgResp) {
                 let currentBG = await BoardGame.create(Object.assign(bg, { userType }));
                 bgList.push(currentBG);
-            });
+            }
 
             return bgList;
         } catch (err) {
@@ -81,7 +82,7 @@ class BoardGameBLL {
         }
     }
 
-    async createBoardGame(userType, title, description, publisherName, expansion, minPlayers, maxPlayers, timeToPlay, minAge, complexity, categoryNames) {
+    async createBoardGame(userType, title, description, publisherName, expansion, minPlayers, max_players, timeToPlay, minAge, complexity, categoryNames) {
         try {
             let allArgumentsValid = checkArguments({
                 title,
@@ -89,7 +90,7 @@ class BoardGameBLL {
                 publisherName,
                 expansion,
                 minPlayers,
-                maxPlayers,
+                max_players,
                 timeToPlay,
                 minAge,
                 complexity,

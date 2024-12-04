@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/boardgames", async (req, res) => {
     try {
         let userType = req.session.userType;
-        const rows = await BoardGameBLL.getAllGamesSimple(userType);
+        const rows = await BoardGameBLL.getAllGames(userType);
         res.json(rows);
     } catch (error) {
         console.error("Error fetching board games:", error);

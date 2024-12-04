@@ -2,29 +2,6 @@ import mysql from 'mysql2/promise';
 import { getConfig } from '../server/dbConfigs.js';
 
 class BoardGamesDAL {
-    async readSimple(userType, bg_id) {
-        let sql = `
-            SELECT bg.id, bg.title
-            FROM BoardGames bg
-            WHERE id = ?
-        `,
-        connection, connectionConfig;
-        try {
-            connectionConfig = getConfig(userType)
-            connection = await mysql.createConnection(connectionConfig);
-
-            let [results] = await connection.execute(sql, [bg_id]);
-            return results[0];
-        } catch (err) {
-            console.error("BoardGames::read Database query error: ", err);
-            throw err;
-        } finally {
-            if (connection) {
-                await connection.end();
-            }
-        }
-    }
-
     async readDetailed(userType, bg_id) {
         let sql = `CALL GetBoardGamesWithDetails('id = ?')`,
         connection, connectionConfig;
@@ -44,20 +21,17 @@ class BoardGamesDAL {
         }
     }
 
-    async getAllSimple(userType) {
-        let sql = `
-            SELECT bg.id, bg.title
-            FROM BoardGames bg
-        `,
+    async getAllDetailed(userType) {
+        let sql = `CALL GetBoardGamesWithDetails(NULL)`,
         connection, connectionConfig;
         try {
             connectionConfig = getConfig(userType)
             connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, []);
-            return results;
+            return results[0];
         } catch (err) {
-            console.error("BoardGames::getAllSimple Database query error: ", err);
+            console.error("BoardGames::getAllDetailed Database query error: ", err);
             throw err;
         } finally {
             if (connection) {

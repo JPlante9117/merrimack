@@ -21,6 +21,25 @@ class PublisherDAL {
         }
     }
 
+    async getByName(userType, name) {
+        let sql = "SELECT * FROM Publishers WHERE name = ?",
+        connection, connectionConfig;
+        try {
+            connectionConfig = getConfig(userType)
+            connection = await mysql.createConnection(connectionConfig);
+    
+            const [results] = await connection.execute(sql, [name]);
+            return results[0];
+        } catch (err) {
+            console.error("Publisher::read Database query error: ", err);
+            throw err;
+        } finally {
+            if (connection) {
+                await connection.end();
+            }
+        }
+    }
+
     async getAll(userType) {
         let sql = "SELECT * FROM Publisher",
             connection, connectionConfig;
