@@ -41,7 +41,7 @@ class PublisherDAL {
     }
 
     async getAll(userType) {
-        let sql = "SELECT * FROM Publisher",
+        let sql = "SELECT * FROM Publishers",
             connection, connectionConfig;
 
         try {
@@ -81,14 +81,13 @@ class PublisherDAL {
     }
 
     async getPublisherGames(userType, name) {
-        let sql = `CALL GetPublisherGames('publisher_name = ?')`, connection, connectionConfig;
+        let sql = `CALL GetPublisherGames(?)`, connection, connectionConfig;
 
         try {
             connectionConfig = getConfig(userType)
             connection = await mysql.createConnection(connectionConfig);
-
             let [results] = await connection.execute(sql, [name]);
-            return results;
+            return results[0];
         } catch (err) {
             console.error("Publisher::getPublisherGames Database query error: ", err);
             throw err;

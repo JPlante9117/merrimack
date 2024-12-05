@@ -1,10 +1,15 @@
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
 
 const router = express.Router();
+
+router.get('/', (req, res) => {
+    let userType = req?.session?.userType || '';
+    if (!userType) {
+        res.redirect('/login');
+    } else {
+        res.redirect('/boardgames');
+    }
+});
 
 router.get('/boardgames', (req, res) => {
     let userType = req?.session?.userType || '';

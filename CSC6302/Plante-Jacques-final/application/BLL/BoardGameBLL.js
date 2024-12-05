@@ -24,7 +24,7 @@ export class BoardGame {
             // Await the asynchronous operations to get student and class details
             let publisher     = await PublisherBLL.getPublisherByName(userType, publisher_name),
                 // Protect against min_players being larger than max_players
-                sortedPlayers = [min_players, max_players].sort(),
+                sortedPlayers = [min_players, max_players].sort((a, b) => a < b ? -1 : 1),
                 players       = `${sortedPlayers[0]}-${sortedPlayers[1]}`;
 
             if (min_players === max_players) {

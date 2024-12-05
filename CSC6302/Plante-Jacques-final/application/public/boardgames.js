@@ -10,12 +10,37 @@ const displayAllGames = () => {
             console.error(resp)
         }
     }).then(boardgames => {
-        console.log(boardgames)
         for (let boardgame of boardgames) {
+            let publisher = boardgame.publisher || {};
+
             tbody.innerHTML += `
                 <tr>
                     <td>
+                        ${boardgame.isExpansion ? `
+                            <div class="expansion-badge" aria-label="Expansion">exp</div>
+                        ` : ''}
                         ${boardgame.title}
+                    </td>
+                    <td class="text-left" colspan="2">
+                        ${boardgame.description}
+                    </td>
+                    <td>
+                        ${publisher.name}
+                    </td>
+                    <td>
+                        ${boardgame.timeToPlay} minutes
+                    </td>
+                    <td>
+                        ${boardgame.players} Players
+                    </td>
+                    <td>
+                        ${boardgame.minAge}+
+                    </td>
+                    <td>
+                        ${boardgame.complexity}
+                    </td>
+                    <td>
+                        ${boardgame.categories}
                     </td>
                 </tr>
             `;
@@ -23,12 +48,36 @@ const displayAllGames = () => {
     });
 }
 
-const insertGameIntoTable = (title) => {
+const insertGameIntoTable = (title, description, publisherName, expansion, timeToPlay, players, minAge, complexity, categories) => {
     let table = document.getElementById('student_table');
     table.innerHTML += `
         <tr>
             <td>
+                ${expansion ? `
+                    <div class="expansion-badge" aria-label="Expansion">exp</div>
+                ` : ''}
                 ${title}
+            </td>
+            <td class="text-left" colspan="2">
+                ${description}
+            </td>
+            <td>
+                ${publisherName}
+            </td>
+            <td>
+                ${timeToPlay}
+            </td>
+            <td>
+                ${players} Players
+            </td>
+            <td>
+                ${minAge}+
+            </td>
+            <td>
+                ${complexity}
+            </td>
+            <td>
+                ${categories}
             </td>
         </tr>
     `;
@@ -236,7 +285,14 @@ const addGame = (event) => {
     
         console.log("Board Game added successfully!");
 
-        insertGameIntoTable(title);
+        let sortedPlayers = [minPlayers, maxPlayers].sort(),
+            players       = `${sortedPlayers[0]}-${sortedPlayers[1]}`;
+
+        if (minPlayers === maxPlayers) {
+            players = `${minPlayers}`;
+        }
+
+        insertGameIntoTable(title, description, publisherName, expansion, players, minAge, complexity, categories);
     }).catch(error => {
         console.error("Error Adding Game: ", error);
     });
@@ -261,7 +317,7 @@ const openGameModal = () => {
 
     modal.innerHTML = `
         <div id="add-game-modal" class="modal" role="modal">
-            <h1>Add a Student</h1>
+            <h1>Add a Board Game</h1>
             <form id="add-game-form">
                 <div id="errors_primary" class="input_errors"></div>
                 <label for="title">Title:</label>
@@ -303,7 +359,7 @@ const openGameModal = () => {
                 <input type="input" name="categories" placeholder="Categories . . ." />
                 <div id="errors_categories" class="input_errors"></div>
                 <div class="modal_button_container">
-                    <button type="submit">Add Student</button>
+                    <button type="submit">Add Game</button>
                     <button onclick="closeBoardGameModal()">Cancel</button>
                 </div>
             </form>
@@ -312,7 +368,7 @@ const openGameModal = () => {
 
     document.body.appendChild(modal);
     let form = modal.querySelector('#add-student-form');
-    form.addEventListener('submit', addStudent)
+    form.addEventListener('submit', addGame)
 }
 
 document.addEventListener('DOMContentLoaded', (e) => {

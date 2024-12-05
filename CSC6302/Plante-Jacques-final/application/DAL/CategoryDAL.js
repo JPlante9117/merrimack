@@ -46,7 +46,7 @@ class CategoryDAL {
     }
 
     async getGames(userType, name) {
-        let sql = "CALL GetCategoryGames('categories LIKE \'% ? %\'')",
+        let sql = `CALL GetCategoryGames(?)`,
             connection, connectionConfig;
 
         try {
@@ -54,7 +54,7 @@ class CategoryDAL {
             connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [name]);
-            return results;
+            return results[0];
         } catch (err) {
             console.error("Categories::getGames Database query error: ", err);
             throw err;

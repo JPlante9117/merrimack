@@ -4,31 +4,37 @@
 <body>
     <%- include('partials/nav') %>
     <div class="content">
-        <h1>Student Roster</h1>
+        <h1>Publishers</h1>
         <div class="select_wrapper">
-            Student Roster for: <select id="teacher_select" onchange="displayTeachersStudents()">
-                <option value="">Select a Teacher</option>
+            Games published by: <select id="publisher_select" onchange="displayPublisherGames()">
+                <option value="">Select a Publisher</option>
                 <!-- will be populated by JS -->
             </select>
         </div>
         <div class="table_wrapper">
-            <table id="student_table">
+            <table id="game_table">
                 <thead>
                     <tr>
                         <th>
-                            First Name
+                            Title
+                        </th>
+                        <th colspan="2">
+                            Description
                         </th>
                         <th>
-                            Last Name
+                            Time to Play
                         </th>
                         <th>
-                            Email Address
+                            Players
                         </th>
                         <th>
-                            Subject
+                            Min. Age
                         </th>
                         <th>
-                            Room Number
+                            Weight
+                        </th>
+                        <th>
+                            Categories
                         </th>
                     </tr>
                 </thead>
@@ -37,18 +43,38 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                    </tr>
-                    <tr>
                         <td></td>
                         <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

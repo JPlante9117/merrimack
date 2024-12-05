@@ -1,5 +1,6 @@
 import PublisherDAL from '../DAL/PublisherDAL.js';
 import { checkArguments, isString } from '../helpers.js';
+import { BoardGame } from './BoardGameBLL.js';
 
 export class Publisher {
     constructor({id, name}) {
@@ -74,10 +75,16 @@ class PublisherBLL {
         }
     }
 
-    async getGames(userType, id) {
+    async getGames(userType, name) {
         try {
-            let gamesResp = await PublisherDAL.getPublisherGames(userType, id);
-            return gamesResp;
+            let gamesResp = await PublisherDAL.getPublisherGames(userType, name),
+                gamesList = [];
+            for (let game of gamesResp) {
+                let gameObj = await BoardGame.create(Object.assign(game, {userType}));
+                gamesList.push(gameObj);
+            }
+
+            return gamesList;
         } catch (err) {
             throw err;
         }

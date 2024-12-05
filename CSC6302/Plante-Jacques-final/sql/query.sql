@@ -12,4 +12,4 @@ CALL AddBoardGame(
 );
 
 SELECT * FROM Categories;
-CALL GetBoardGamesWithDetails('id = 3');
+CALL GetPublisherGames('CMYK');

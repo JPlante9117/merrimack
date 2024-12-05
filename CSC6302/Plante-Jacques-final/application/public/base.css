@@ -1,5 +1,13 @@
 body {
-    background-color: rgb(200, 200, 255);
+    --main-bg: rgb(80, 120, 80);
+    --table-bg: rgb(110, 165, 110);
+    --table-head: rgb(70, 105, 70);
+    --table-hover: rgb(120, 180, 120);
+    --button-bg: var(--table-bg);
+    --button-border: var(--table-head);
+    --nav-bg: rgb(90, 135, 90);
+
+    background-color: var(--main-bg);
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     margin: 0;
 }
@@ -16,7 +24,7 @@ h1 {
 }
 
 .table_wrapper {
-    background-color: rgb(230, 230, 255);
+    background-color: var(--table-bg);
     padding-bottom: 0.5rem;
     display: inline-block;
     border-radius: 6px;
@@ -28,18 +36,21 @@ table {
     border-radius: 6px;
     border-collapse: collapse;
     padding: 0.5rem;
+    font-size: 0.75rem;
 }
 
 table thead {
     position: sticky;
     top: 0;
-    background: rgb(154, 154, 255);
+    background: var(--table-head);
+    z-index: 1;
 }
 
 table th,
 table td {
     text-align: center;
     padding: 0.5rem 1rem;
+    position: relative;
 }
 
 table td:first-child {
@@ -53,7 +64,19 @@ table td:last-child {
 }
 
 table tr:hover td {
-    background-color: rgb(215, 200, 255);
+    background-color: var(--table-hover);
+}
+
+.expansion-badge {
+    border-radius: 2px;
+    font-size: 0.5rem;
+    line-height: 0.5rem;
+    background: rgb(173, 173, 44);
+    color: white;
+    padding: 0.125rem;
+    text-transform: uppercase;
+    width: 1.125rem;
+    margin: auto;
 }
 
 .modal_container {
@@ -72,7 +95,7 @@ table tr:hover td {
     transform: translate(-50%, -50%);
     border-radius: 6px;
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
-    background-color: rgb(200, 200, 255);
+    background-color: var(--main-bg);
     padding: 1rem;
     width: 500px;
     max-width: 90%;
@@ -86,9 +109,9 @@ table tr:hover td {
 }
 
 button {
-    background: rgb(230, 230, 255);
-    border: 1px solid rgb(160, 160, 255);
-    border-bottom: 4px solid rgb(160, 160, 255);
+    background: var(--button-bg);
+    border: 1px solid var(--button-border);
+    border-bottom: 4px solid var(--button-border);
     border-radius: 4px;
     transition: 150ms ease;
 }
@@ -104,17 +127,21 @@ button#add-student {
 }
 
 button:active {
-    border-bottom: 2px solid rgb(160, 160, 255);
+    border-bottom: 2px solid var(--button-border);
 }
 
 input {
     display: flex;
     width: 100%;
     border: 1px solid transparent;
-    background: rgb(230, 230, 255);
+    background: var(--table-bg);
     border-radius: 2px;
     font-size: 1rem;
     padding: 0.25rem;
+}
+
+input::placeholder {
+    color: var(--table-head)
 }
 
 select {
@@ -138,7 +165,7 @@ input.error_input {
     padding: 0.5rem 0.5rem 0;
     height: 2rem;
     font-size: 0.875rem;
-    background-color: rgb(178, 178, 228);
+    background-color: var(--nav-bg);
     display: flex;
     align-items: flex-end;
 }
@@ -161,5 +188,9 @@ input.error_input {
 }
 
 .navigation a.navigation_active {
-    background-color: rgb(200, 200, 255);
+    background-color: var(--main-bg);
+}
+
+.text-left {
+    text-align: left;
 }

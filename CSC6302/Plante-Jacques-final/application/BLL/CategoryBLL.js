@@ -47,8 +47,7 @@ class CategoryBLL {
     async getGames(userType, name) {
         try {
             let allArgumentsValid = checkArguments({
-                first_name: firstName,
-                last_name: lastName
+                name
             });
     
             if (isString(allArgumentsValid)) {
@@ -58,12 +57,12 @@ class CategoryBLL {
             let gamesResp = await CategoryDAL.getGames(userType, name),
                 gamesArr = [];
     
-            gamesResp.forEach(async payload => {
-                payload = Object.assign(payload, { userType });
+            for (let game of gamesResp) {
+                const payload = Object.assign(game, { userType }),
+                    gameObj = await BoardGame.create(payload);
 
-                let game = await BoardGame.create(payload);
-                gamesArr.push(game)
-            });
+                gamesArr.push(gameObj)
+            }
     
             return gamesArr;
         } catch (err) {
@@ -73,7 +72,7 @@ class CategoryBLL {
 
     async getCategories(userType) {
         try {
-            let categoriesResp = await CategoryDAL.getCategories(userType),
+            let categoriesResp = await CategoryDAL.getAll(userType),
                 categories = []
 
             for (let category of categoriesResp) {
