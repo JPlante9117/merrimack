@@ -1,9 +1,9 @@
-# Jacques Plante CSC6302 Database Application
+# Jacques Plante CSC6302 Database Application Final Project
 
 ## Running instructions
-To run the app, simply put
+To run the app, make sure you are in the application folder and simply put
 ```
-npm install && npm start
+npm install && npm run start
 ```
 in the terminal
 
