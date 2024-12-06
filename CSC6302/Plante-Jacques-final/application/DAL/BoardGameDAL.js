@@ -3,7 +3,7 @@ import { getConfig } from '../server/dbConfigs.js';
 
 class BoardGamesDAL {
     async readDetailed(userType, bg_id) {
-        let sql = `CALL GetBoardGamesWithDetails('id = ?')`,
+        let sql = `CALL GetBoardGamesWithDetails('id = ?', NULL)`,
         connection, connectionConfig;
         try {
             connectionConfig = getConfig(userType)
@@ -22,7 +22,7 @@ class BoardGamesDAL {
     }
 
     async getAllDetailed(userType) {
-        let sql = `CALL GetBoardGamesWithDetails(NULL)`,
+        let sql = `CALL GetBoardGamesWithDetails(NULL, NULL)`,
         connection, connectionConfig;
         try {
             connectionConfig = getConfig(userType)
@@ -41,17 +41,20 @@ class BoardGamesDAL {
     }
 
     async add(userType, title, description, publisherName, expansion, minPlayers, maxPlayers, timeToPlay, minAge, complexity, categoryNames){ 
-        let sql = `CALL AddBoardGame(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        connection, connectionConfig;
+        const sql = `CALL AddBoardGame(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @new_bg_id)`;
+        const idSql = `SELECT @new_bg_id`;
+        let connection, connectionConfig;
         try {
             connectionConfig = getConfig(userType)
             connection = await mysql.createConnection(connectionConfig);
 
-            let [results] = await connection.execute(
+            await connection.execute(
                 sql,
                 [title, description, publisherName, expansion, minPlayers, maxPlayers, timeToPlay, minAge, complexity, categoryNames]
             );
-            return results;
+
+            let [results] = await connection.execute(idSql, []);
+            return results[0]['@new_bg_id'];
         } catch (err) {
             console.error("BoardGames::add Database query error: ", err);
             throw err;

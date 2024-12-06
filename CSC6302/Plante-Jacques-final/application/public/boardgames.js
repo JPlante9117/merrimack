@@ -49,7 +49,9 @@ const displayAllGames = () => {
 }
 
 const insertGameIntoTable = (title, description, publisherName, expansion, timeToPlay, players, minAge, complexity, categories) => {
-    let table = document.getElementById('student_table');
+    console.log(complexity, categories);
+    
+    let table = document.getElementById('game_table');
     table.innerHTML += `
         <tr>
             <td>
@@ -131,17 +133,7 @@ const validateNewGame = ({title, description, publisherName, minPlayers, maxPlay
     
     if (!maxPlayers) {
         hasErrors = true;
-        errorList.minPlayers.push('Board Game must have maximum players set. Can be same as minimum if fixed amount');
-    }
-
-    if (typeof minPlayers !== 'number') {
-        hasErrors = true;
-        errorList.minPlayers.push('Minimum players must be a number');
-    }
-
-    if (typeof maxPlayers !== 'number') {
-        hasErrors = true;
-        errorList.maxPlayers.push('Maximum players must be a number');
+        errorList.maxPlayers.push('Board Game must have maximum players set. Can be same as minimum if fixed amount');
     }
 
     if (minPlayers > maxPlayers) {
@@ -155,19 +147,9 @@ const validateNewGame = ({title, description, publisherName, minPlayers, maxPlay
         errorList.timeToPlay.push('Board Game must have a time to play');
     }
 
-    if (typeof timeToPlay !== 'number') {
-        hasErrors = true;
-        errorList.timeToPlay.push('Time to play should be a number');
-    }
-
     if (!minAge) {
         hasErrors = true;
         errorList.minAge.push('Board Game must have a minimum age requirement');
-    }
-
-    if (typeof minAge !== 'number') {
-        hasErrors = true;
-        errorList.minAge.push('Minimum age should be a number');
     }
 
     if (!complexity) {
@@ -196,7 +178,7 @@ const getBadRespErrors = (err) => {
     if (err.status == 403) {
         errorList.primary.push('Permission Denied: You appear to not have access to this functionality');
     } else if (err.status == 409) {
-        errorList.primary.push('Duplicate Student: This student either is already in the database, or the email address is shared with another student.');
+        errorList.primary.push('Duplicate Game: This game either is already in the database.');
     }
 
     return errorList;
@@ -227,19 +209,34 @@ const displayFormErrors = (errorList) => {
     })
 }
 
+const parseCategoryTags = (containerNode) => {
+    const tags = containerNode.querySelectorAll('.tag');
+    const catArr = [];
+
+    for (let tag of tags) {
+        const label = tag.querySelector('span');
+        const cleanedLabel = label.innerText.replace(',', ' ');
+        catArr.push(cleanedLabel);
+    }
+
+    return catArr.join(',');
+}
+
 const addGame = (event) => {
     event.preventDefault();
     const form        = event.target,
         title         = form.querySelector('input[name="title"]').value,
-        description   = form.querySelector('input[name="description"').value,
-        publisherName = form.querySelector('input[name="publisherName"').value,
-        expansion     = form.querySelector('input[name="expansion"').value,
-        minPlayers    = form.querySelector('input[name="minPlayers"').value,
-        maxPlayers    = form.querySelector('input[name="maxPlayers"').value,
-        timeToPlay    = form.querySelector('input[name="timeToPlay"').value,
-        minAge        = form.querySelector('input[name="minAge"').value,
-        complexity    = form.querySelector('input[name="complexity"').value,
-        categories    = form.querySelector('input[name="categories"').value;
+        description   = form.querySelector('input[name="description"]').value,
+        publisherName = form.querySelector('select[name="publisherName"]').value,
+        expansion     = form.querySelector('input[name="expansion"]').checked,
+        minPlayers    = form.querySelector('input[name="minPlayers"]').value,
+        maxPlayers    = form.querySelector('input[name="maxPlayers"]').value,
+        timeToPlay    = form.querySelector('input[name="timeToPlay"]').value,
+        minAge        = form.querySelector('input[name="minAge"]').value,
+        complexity    = form.querySelector('select[name="complexity"]').value,
+        categories    = form.querySelector('#categories-tag-container');
+
+    categoriesSubmitValue = parseCategoryTags(categories);
 
     let {hasErrors, errorList} = validateNewGame({
         title,
@@ -250,7 +247,7 @@ const addGame = (event) => {
         timeToPlay,
         minAge,
         complexity,
-        categories
+        categories: categoriesSubmitValue
     });
 
     if (hasErrors) {
@@ -273,7 +270,7 @@ const addGame = (event) => {
             timeToPlay,
             minAge,
             complexity,
-            categories
+            categories: categoriesSubmitValue
         })
     }).then(async resp => {
         if (!resp.ok) {
@@ -282,7 +279,7 @@ const addGame = (event) => {
             throw new Error(resp.status, resp.statusText)
         }
         closeBoardGameModal()
-    
+        
         console.log("Board Game added successfully!");
 
         let sortedPlayers = [minPlayers, maxPlayers].sort(),
@@ -292,16 +289,128 @@ const addGame = (event) => {
             players = `${minPlayers}`;
         }
 
-        insertGameIntoTable(title, description, publisherName, expansion, players, minAge, complexity, categories);
+        insertGameIntoTable(title, description, publisherName, expansion, timeToPlay, players, minAge, complexity, categoriesSubmitValue);
     }).catch(error => {
         console.error("Error Adding Game: ", error);
     });
 }
 
 const closeBoardGameModal = () => {
-    let modal = document.getElementsByClassName('modal_container')[0];
+    const modal = document.getElementById('add-game-modal'),
+        modalContainer = modal.parentNode;
 
-    document.body.removeChild(modal);
+    document.body.removeChild(modalContainer);
+}
+
+const closeSimpleModal = () => {
+    const modal = document.getElementById('add-simple-modal'),
+        modalContainer = modal.parentNode;
+
+    document.body.removeChild(modalContainer);
+}
+
+const removeTag = (e) => {
+    const tag = e.target.parentNode;
+    const container = tag.parentNode;
+
+    if (tag && container) {
+        container.removeChild(tag); 
+    }
+}
+
+const appendTag = (selection, fixedValue = "") => {
+    const tagInput = document.getElementById(`${selection}-tag-input`);
+    const tagContainer = document.getElementById(`${selection}-tag-container`);
+    const allExistingTags = tagContainer.querySelectorAll('.tag');
+    const inputVal = fixedValue || tagInput && tagInput.value || '';
+    let tagExists = false;
+
+    if (inputVal === `new_${selection}`) {
+        openAddSimpleModal(selection);
+    } else {
+        for (let existingTag of allExistingTags) {
+            let label = existingTag.querySelector('span');
+            if (label.textContent.toLowerCase() === inputVal.toLowerCase()) {
+                tagExists = true;
+                break;
+            }
+        }
+    
+        if (!tagExists && inputVal) {
+            const tagElement = document.createElement('div');
+            tagElement.classList.add('tag');
+            tagElement.innerHTML = `
+                <span>${inputVal}</span>
+                <span role="button" class="close" onclick="removeTag(event)">x</span>
+            `;
+            tagContainer.appendChild(tagElement);
+        }
+    }
+
+    tagInput.value = '';
+}
+
+const onPublisherChange = () => {
+    const input = document.querySelector(`select[name="publisherName"`);
+    const inputVal = input && input.value || '';
+
+    if (inputVal === 'new_publisherName') {
+        openAddSimpleModal('publisherName');
+    }
+}
+
+const addSelection = (event, selection) => {
+    event.preventDefault();
+    const form = event.target;
+    const name = form.querySelector('input[name="name"]').value;
+
+    if (selection === 'categories') {
+        appendTag(selection, name);
+    } else {
+        const select = document.querySelector(`select[name="${selection}"]`);
+        const options = select.getElementsByTagName('option');
+
+        for (let opt of options) {
+            opt.selected = false;
+        }
+
+        select.innerHTML += `
+            <option value="${name}" selected>${name}</option>
+        `;
+    }
+
+    closeSimpleModal();
+}
+
+const openAddSimpleModal = (selection) => {
+    const modal = document.createElement('div');
+    const title = selection === 'publisherName' ? 'Publisher' : 'Category';
+    modal.classList.add('modal_container');
+
+    let existingModal = document.getElementById('add-simple-modal');
+
+    if (existingModal) {
+        // Do not add another modal.
+        return;
+    }
+
+    modal.innerHTML = `
+        <div id="add-simple-modal" class="modal" role="modal">
+            <h1>Add New ${title}</h1>
+            <form id="add-simple-form">
+                <label for="name">Name:</label>
+                <input type="text" name="name" />
+                <div class="modal_button_container">
+                    <button type="submit">Add</button>
+                    <button onclick="closeSimpleModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    let form = modal.querySelector('#add-simple-form');
+    form.addEventListener('submit', event => addSelection(event, selection))
 }
 
 const openGameModal = () => {
@@ -327,8 +436,10 @@ const openGameModal = () => {
                 <input type="textarea" name="description" placeholder="Ex: An economic, tile-laying game where players . . ." />
                 <div id="errors_description" class="input_errors"></div>
                 <label for="publisherName">Publisher:</label>
-                <select name="publisherName">
-                    <!-- populate with publishers -->
+                <select name="publisherName" onchange="onPublisherChange()">
+                    <option value="">Select a Publisher</option>
+                    <option value="new_publisherName">New Publisher</option>
+                    <!-- will be populated by js -->
                 </select>
                 <div id="errors_publisherName" class="input_errors"></div>
                 <label for="expansion">Expansion?</label>
@@ -346,7 +457,7 @@ const openGameModal = () => {
                 <input type="number" name="minAge" min="1" />
                 <div id="errors_minAge" class="input_errors"></div>
                 <label for="complexity">Weight:</label>
-                <select name="complexity">
+                <select id="complexity" name="complexity">
                     <option value="">How 'Heavy' is this game?</option>
                     <option value="Light">Light</option>
                     <option value="Medium Light">Medium Light</option>
@@ -356,7 +467,13 @@ const openGameModal = () => {
                 </select>
                 <div id="errors_complexity" class="input_errors"></div>
                 <label for="categories">Categories:</label>
-                <input type="input" name="categories" placeholder="Categories . . ." />
+                <div id="categories-tag-container"></div>
+                <select id="categories-tag-input" onchange="appendTag('categories')" name="categories">
+                    <option value="">Select Categories</option>
+                    <option value="new_categories">Add New Category</option>
+                    <!-- will be populated by js -->
+                </select>
+                <div id="categories-suggestions"></div>
                 <div id="errors_categories" class="input_errors"></div>
                 <div class="modal_button_container">
                     <button type="submit">Add Game</button>
@@ -367,8 +484,39 @@ const openGameModal = () => {
     `;
 
     document.body.appendChild(modal);
-    let form = modal.querySelector('#add-student-form');
-    form.addEventListener('submit', addGame)
+    let form = modal.querySelector('#add-game-form');
+    form.addEventListener('submit', addGame);
+
+    // Populate Selects
+    fetch('http://localhost:3000/api/publishers').then(resp => {
+        if (resp.ok) {
+            return resp.json();
+        } else {
+            console.error(resp)
+        }
+    }).then(publishers => {
+        let select = document.querySelector('select[name="publisherName"]');
+        for (let publisher of publishers) {
+            select.innerHTML += `
+                <option value="${publisher.name}">${publisher.name}</option>
+            `
+        }
+    });
+
+    fetch('http://localhost:3000/api/categories').then(resp => {
+        if (resp.ok) {
+            return resp.json();
+        } else {
+            console.error(resp)
+        }
+    }).then(categories => {
+        let select = document.querySelector('select[name="categories"]');
+        for (let category of categories) {
+            select.innerHTML += `
+                <option value="${category.name}">${category.name}</option>
+            `
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', (e) => {

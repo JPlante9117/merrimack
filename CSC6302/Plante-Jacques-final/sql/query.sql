@@ -1,15 +1,14 @@
-CALL AddBoardGame(
-    'Test',
-    'Test Description',
-    'My New Publisher',
-    FALSE,
-    2,
-    3,
-    50,
-    8,
-    1,
-    'Another New Category,Something Else'
-);
+DROP PROCEDURE IF EXISTS ssss;
 
-SELECT * FROM Categories;
-CALL GetPublisherGames('CMYK');
+DELIMITER //
+
+CREATE PROCEDURE ssss(publisher_name VARCHAR(50))
+READS SQL DATA
+BEGIN
+    CALL GetBoardGamesWithDetails(CONCAT('LENGTH(publisher_name) = LENGTH(\'', publisher_name, '\')
+    AND publisher_name = \'', publisher_name, '\''));
+END//
+
+DELIMITER ;
+
+CALL ssss('s');

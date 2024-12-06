@@ -21,7 +21,7 @@ export class BoardGame {
         id, title, description, publisher_name, expansion, min_players, max_players, time_to_play, min_age, complexity, categories, userType
     }) {
         try {
-            // Await the asynchronous operations to get student and class details
+            // Await the asynchronous operations to get publisher
             let publisher     = await PublisherBLL.getPublisherByName(userType, publisher_name),
                 // Protect against min_players being larger than max_players
                 sortedPlayers = [min_players, max_players].sort((a, b) => a < b ? -1 : 1),
@@ -82,7 +82,7 @@ class BoardGameBLL {
         }
     }
 
-    async createBoardGame(userType, title, description, publisherName, expansion, minPlayers, max_players, timeToPlay, minAge, complexity, categoryNames) {
+    async createBoardGame(userType, title, description, publisherName, expansion, minPlayers, maxPlayers, timeToPlay, minAge, complexity, categoryNames) {
         try {
             let allArgumentsValid = checkArguments({
                 title,
@@ -90,7 +90,7 @@ class BoardGameBLL {
                 publisherName,
                 expansion,
                 minPlayers,
-                max_players,
+                maxPlayers,
                 timeToPlay,
                 minAge,
                 complexity,
@@ -101,11 +101,22 @@ class BoardGameBLL {
                 return new Error(`${allArgumentsValid} is required.`);
             }
     
-            let classResp = await ClassesDAL.add(userType, subject, teacherId, roomNumber),
-                classId = classResp.insertId,
-                thisClass = await this.getClass(classId)
+            const bgResp = await BoardGameDAL.add(userType, title, description, publisherName, expansion, minPlayers, maxPlayers, timeToPlay, minAge, complexity, categoryNames);
+            const game = await BoardGame.create({
+                    id: bgResp,
+                    title,
+                    description,
+                    publisher_name: publisherName,
+                    expansion,
+                    min_players: minPlayers,
+                    max_players: maxPlayers,
+                    time_to_play: timeToPlay,
+                    complexity,
+                    categories: categoryNames,
+                    userType
+                });
 
-            return thisClass;
+            return game;
         } catch (err) {
             throw err;
         }

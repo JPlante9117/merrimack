@@ -24,8 +24,6 @@ app.use(session({
 // Allow service of static files in the ../views directory
 app.use(express.static(path.join(__dirname, '../public')));
 
-
-// Basic route to fetch all students
 app.use('/api', apiRoutes);
 app.use('/', viewRoutes);
 

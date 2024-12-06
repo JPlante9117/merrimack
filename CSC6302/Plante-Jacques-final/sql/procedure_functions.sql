@@ -12,7 +12,8 @@ CREATE PROCEDURE AddBoardGame(
     IN p_time_to_play INT,
     IN p_min_age INT,
     IN p_complexity ENUM('Light', 'Medium Light', 'Medium', 'Medium Heavy', 'Heavy'),
-    IN p_categories VARCHAR(255)
+    IN p_categories VARCHAR(255),
+    OUT p_bg_id INT
 )
 MODIFIES SQL DATA
 BEGIN
@@ -73,9 +74,14 @@ BEGIN
         VALUES
             (v_bg_id, @category_id);
     END WHILE;
+    
+    SET p_bg_id = v_bg_id;
 END//
 
-CREATE PROCEDURE GetBoardGamesWithDetails(have_statement VARCHAR(100))
+CREATE PROCEDURE GetBoardGamesWithDetails(
+    where_statement VARCHAR(100),
+    have_statement VARCHAR(100)
+)
 READS SQL DATA
 BEGIN
     SET @sql = CONCAT('SELECT
@@ -93,15 +99,18 @@ BEGIN
     FROM BoardGames bg
     JOIN Publishers p ON bg.publisher_id = p.id
     JOIN BoardGamesCategories bgc ON bg.id = bgc.bg_id
-    JOIN Categories c ON bgc.cat_id = c.id
-    GROUP BY bg.id ');
+    JOIN Categories c ON bgc.cat_id = c.id');
+
+    IF where_statement IS NOT NULL THEN
+        SET @sql = CONCAT(@sql, ' WHERE ', where_statement);
+    END IF;
+
+    SET @sql = CONCAT(@sql, ' GROUP BY bg.id');
     
     IF have_statement IS NOT NULL THEN
-		SET @sql = CONCAT(@sql, 'HAVING ', have_statement);
-        PREPARE stmt FROM @sql;
-        EXECUTE stmt;
-        DEALLOCATE PREPARE stmt;
+		SET @sql = CONCAT(@sql, ' HAVING ', have_statement);
 	END IF;
+
 	PREPARE stmt FROM @sql;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
@@ -110,13 +119,13 @@ END//
 CREATE PROCEDURE GetCategoryGames(category_name VARCHAR(50))
 READS SQL DATA
 BEGIN
-  CALL GetBoardGamesWithDetails(CONCAT('categories LIKE \'%', category_name, '%\''));
+  CALL GetBoardGamesWithDetails(CONCAT('c.name IN (SELECT c.name FROM Categories c WHERE c.name = \'', category_name, '\')'), NULL);
 END//
 
 CREATE PROCEDURE GetPublisherGames(publisher_name VARCHAR(50))
 READS SQL DATA
 BEGIN
-    CALL GetBoardGamesWithDetails(CONCAT('publisher_name LIKE \'%', publisher_name, '%\''));
+    CALL GetBoardGamesWithDetails(NULL, CONCAT('LENGTH(publisher_name) = LENGTH(\'', publisher_name, '\') AND publisher_name = \'', publisher_name, '\''));
 END//
 
 DELIMITER ;
