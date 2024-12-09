@@ -114,6 +114,8 @@ BEGIN
 		SET @sql = CONCAT(@sql, ' HAVING ', have_statement);
 	END IF;
 
+    SET @sql = CONCAT(@sql, ' ORDER BY bg.title ASC');
+
 	PREPARE stmt FROM @sql;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
