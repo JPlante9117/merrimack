@@ -45,7 +45,7 @@ class CategoryDAL {
         }
     }
 
-    async getGames(userType, name) {
+    async getGames(userType, id) {
         let sql = `CALL GetCategoryGames(?)`,
             connection, connectionConfig;
 
@@ -53,7 +53,8 @@ class CategoryDAL {
             connectionConfig = getConfig(userType);
             connection = await mysql.createConnection(connectionConfig);
 
-            let [results] = await connection.execute(sql, [name]);
+            let [results] = await connection.execute(sql, [id]);
+            console.log("CATEGORIESDAL::", results[0])
             return results[0];
         } catch (err) {
             console.error("Categories::getGames Database query error: ", err);

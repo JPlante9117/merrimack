@@ -48,9 +48,7 @@ const displayAllGames = () => {
     });
 }
 
-const insertGameIntoTable = (title, description, publisherName, expansion, timeToPlay, players, minAge, complexity, categories) => {
-    console.log(complexity, categories);
-    
+const insertGameIntoTable = (title, description, publisherName, expansion, timeToPlay, players, minAge, complexity, categories) => {    
     let table = document.getElementById('game_table');
     table.innerHTML += `
         <tr>

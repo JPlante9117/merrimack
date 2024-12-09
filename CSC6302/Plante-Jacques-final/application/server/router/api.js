@@ -96,9 +96,9 @@ router.get('/categories', async (req, res) => {
 router.get('/getCategoryGames', async (req, res) => {
     try {
         let userType = req.session.userType,
-            name = req.query.name;
+            id = req.query.id;
 
-        const rows = await CategoryBLL.getGames(userType, name);
+        const rows = await CategoryBLL.getGames(userType, id);
         res.json(rows);
     } catch (error) {
         console.error("Error getting category games: ", error);

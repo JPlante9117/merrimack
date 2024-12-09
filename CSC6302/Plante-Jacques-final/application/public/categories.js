@@ -9,7 +9,7 @@ const displayAllCategories = () => {
     }).then(categories => {
         for (let category of categories) {
             select.innerHTML += `
-                <option value="${category.name}">${category.name}</option>
+                <option value="${category.id}">${category.name}</option>
             `
         }
     });
@@ -19,8 +19,8 @@ const displayCategoryGames = () => {
     let select = document.getElementById('category_select');
 
     if (select.value !== "") {
-        let name = select.value;
-        fetch(`http://localhost:3000/api/getCategoryGames?name=${name}`).then(resp => {
+        let id = parseInt(select.value);
+        fetch(`http://localhost:3000/api/getCategoryGames?id=${id}`).then(resp => {
             if (resp.ok) {
                 return resp.json();
             } else {

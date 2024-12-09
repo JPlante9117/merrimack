@@ -95,11 +95,14 @@ BEGIN
         bg.min_age, 
         bg.complexity,
         p.name AS publisher_name,
-        GROUP_CONCAT(c.name SEPARATOR \', \') AS categories
+        (SELECT GROUP_CONCAT(c2.name SEPARATOR \', \') 
+         FROM BoardGamesCategories bgc2
+         JOIN Categories c2 ON bgc2.cat_id = c2.id
+         WHERE bgc2.bg_id = bg.id
+         GROUP BY bgc2.bg_id) AS categories
     FROM BoardGames bg
     JOIN Publishers p ON bg.publisher_id = p.id
-    JOIN BoardGamesCategories bgc ON bg.id = bgc.bg_id
-    JOIN Categories c ON bgc.cat_id = c.id');
+    JOIN BoardGamesCategories bgc ON bg.id = bgc.bg_id');
 
     IF where_statement IS NOT NULL THEN
         SET @sql = CONCAT(@sql, ' WHERE ', where_statement);
@@ -116,10 +119,10 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END//
 
-CREATE PROCEDURE GetCategoryGames(category_name VARCHAR(50))
+CREATE PROCEDURE GetCategoryGames(category_id INT)
 READS SQL DATA
 BEGIN
-  CALL GetBoardGamesWithDetails(CONCAT('c.name IN (SELECT c.name FROM Categories c WHERE c.name = \'', category_name, '\')'), NULL);
+  CALL GetBoardGamesWithDetails(CONCAT('bgc.cat_id = ', category_id), NULL);
 END//
 
 CREATE PROCEDURE GetPublisherGames(publisher_name VARCHAR(50))

@@ -44,18 +44,20 @@ class CategoryBLL {
         }
     }
 
-    async getGames(userType, name) {
+    async getGames(userType, id) {
         try {
             let allArgumentsValid = checkArguments({
-                name
+                id
             });
     
             if (isString(allArgumentsValid)) {
                 return new Error(`${allArgumentsValid} is required`);
             }
     
-            let gamesResp = await CategoryDAL.getGames(userType, name),
+            let gamesResp = await CategoryDAL.getGames(userType, id),
                 gamesArr = [];
+
+            console.log("CATEGORYBLL::GAMESRESP", gamesResp[0])
     
             for (let game of gamesResp) {
                 const payload = Object.assign(game, { userType }),
