@@ -16,18 +16,6 @@ router.get("/boardgames", async (req, res) => {
     }
 });
 
-router.get("/boardgames/:id", async (req, res) => {
-    try {
-        let userType = req.session.userType,
-            id       = req.params.id;
-        const rows = await BoardGameBLL.getBoardGame(userType, id);
-        res.json(rows);
-    } catch (error) {
-        console.error("Error fetching board game with ID ", id, error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
-
 router.post("/boardgames", async(req, res) => {
     try {
         let userType = req?.session?.userType;

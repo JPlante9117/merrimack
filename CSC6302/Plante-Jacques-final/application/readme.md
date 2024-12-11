@@ -11,6 +11,9 @@ Then hit http://localhost:3000/login for your baseline.
 This will prompt you to choose either the read_only or modify_role user type.
 Later you can swap between the credentials easily by pressing the button in the upper right to swap accounts.
 
+## Usage Notes
+Your direct
+
 ## DB Setup
 In the SQL folder, run the files in the following order:
 ```

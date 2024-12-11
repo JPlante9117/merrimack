@@ -57,7 +57,6 @@ class CategoryBLL {
             let gamesResp = await CategoryDAL.getGames(userType, id),
                 gamesArr = [];
 
-            console.log("CATEGORYBLL::GAMESRESP", gamesResp[0])
     
             for (let game of gamesResp) {
                 const payload = Object.assign(game, { userType }),

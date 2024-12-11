@@ -54,7 +54,6 @@ class CategoryDAL {
             connection = await mysql.createConnection(connectionConfig);
 
             let [results] = await connection.execute(sql, [id]);
-            console.log("CATEGORIESDAL::", results[0])
             return results[0];
         } catch (err) {
             console.error("Categories::getGames Database query error: ", err);
