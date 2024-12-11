@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                border: 4px solid black;
+                min-height: 200px;
+                padding: 0 2rem;
+                border-radius: 2px;
+            }
+            #message_container {
+                margin-top: 1rem;
+            }
+        </style>
+        <script>
+            function setBackground() {
+                const body = document.body;
+
+                if (body) {
+                    body.style.backgroundColor = "orange";
+                }
+            }
+
+            function setMessage() {
+                const msg_container = document.getElementById("message_container");
+
+                if (msg_container) {
+                    msg_container.innerText = "Hello, World!"
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Welcome to my webpage!</h1>
+        <button onclick="setBackground();">Change Background</button>
+        <button onclick="setMessage();">Display Message</button>
+        <div id="message_container"></div>
+    </body>
+</html>
